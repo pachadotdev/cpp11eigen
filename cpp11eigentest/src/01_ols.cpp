@@ -16,3 +16,10 @@ MatrixXd ols_(const doubles_matrix<>& y, const doubles_matrix<>& x) {
   MatrixXd beta = ols_(y, x);
   return as_doubles_matrix(beta);
 }
+
+[[cpp11::register]] doubles ols_vec(const doubles_matrix<>& y,
+                                             const doubles_matrix<>& x) {
+  MatrixXd beta = ols_(y, x);
+
+  return as_doubles(beta);
+}

@@ -3,3 +3,7 @@
 ols_mat <- function(y, x) {
   .Call(`_cpp11eigentest_ols_mat`, y, x)
 }
+
+ols_vec <- function(y, x) {
+  .Call(`_cpp11eigentest_ols_vec`, y, x)
+}

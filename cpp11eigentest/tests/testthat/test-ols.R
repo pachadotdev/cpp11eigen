@@ -6,9 +6,11 @@ test_that("Ordinary Least Squares Matrix (i.e., transposition and inverses)", {
 
   # Armadillo computation
   a <- ols_mat(y, x)
+  b <- matrix(ols_vec(y, x), ncol = 1)
 
   # Base R computation
-  b <- matrix(solve(t(x) %*% x) %*% t(x) %*% y, ncol = 1)
+  c <- matrix(solve(t(x) %*% x) %*% t(x) %*% y, ncol = 1)
 
   expect_equal(a, b)
+  expect_equal(a, c)
 })

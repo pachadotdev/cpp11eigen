@@ -7,3 +7,4 @@
 #include "eigen/Dense"
 #include <cpp11.hpp>
 #include <wrappers/matrices.hpp>
+#include <wrappers/vectors.hpp>

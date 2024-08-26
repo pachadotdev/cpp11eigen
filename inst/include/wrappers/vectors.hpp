@@ -1,6 +1,5 @@
 #pragma once
 
-using namespace Eigen;
 using namespace cpp11;
 
 #ifndef VECTORS_HPP
@@ -17,7 +16,7 @@ using namespace cpp11;
 // we can use std::copy from R to Armadillo, not the other way around
 
 template <typename T, typename U>
-inline U Matrix_to_dblint_(const Matrix<T, Dynamic, Dynamic>& x) {
+inline U Matrix_to_dblint_(const Eigen::Matrix<T, Dynamic, Dynamic>& x) {
   const int n = x.rows();
   const int m = x.cols();
 
@@ -40,11 +39,11 @@ inline U Matrix_to_dblint_(const Matrix<T, Dynamic, Dynamic>& x) {
   return y;
 }
 
-inline integers as_integers(const Matrix<int, Dynamic, Dynamic>& x) {
+inline integers as_integers(const Eigen::Matrix<int, Dynamic, Dynamic>& x) {
   return Matrix_to_dblint_<int, integers>(x);
 }
 
-inline doubles as_doubles(const Matrix<double, Dynamic, Dynamic>& x) {
+inline doubles as_doubles(const Eigen::Matrix<double, Dynamic, Dynamic>& x) {
   return Matrix_to_dblint_<double, doubles>(x);
 }
 

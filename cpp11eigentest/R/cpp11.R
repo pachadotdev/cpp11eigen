@@ -7,3 +7,39 @@ ols_mat <- function(y, x) {
 ols_vec <- function(y, x) {
   .Call(`_cpp11eigentest_ols_vec`, y, x)
 }
+
+eigen_sym_mat <- function(x) {
+  .Call(`_cpp11eigentest_eigen_sym_mat`, x)
+}
+
+eigen_sym_dbl <- function(x) {
+  .Call(`_cpp11eigentest_eigen_sym_dbl`, x)
+}
+
+chol_mat <- function(x) {
+  .Call(`_cpp11eigentest_chol_mat`, x)
+}
+
+ols_qr_mat <- function(y, x) {
+  .Call(`_cpp11eigentest_ols_qr_mat`, y, x)
+}
+
+ols_qr_dbl <- function(y, x) {
+  .Call(`_cpp11eigentest_ols_qr_dbl`, y, x)
+}
+
+typedef_Col_double <- function(x) {
+  .Call(`_cpp11eigentest_typedef_Col_double`, x)
+}
+
+typedef_Col_int <- function(x) {
+  .Call(`_cpp11eigentest_typedef_Col_int`, x)
+}
+
+typedef_Mat_double <- function(x) {
+  .Call(`_cpp11eigentest_typedef_Mat_double`, x)
+}
+
+typedef_Mat_int <- function(x) {
+  .Call(`_cpp11eigentest_typedef_Mat_int`, x)
+}

@@ -22,8 +22,7 @@ inline U Matrix_to_dblint_(const Matrix<T, Dynamic, Dynamic>& x) {
   const int m = x.cols();
 
   if (m != 1) {
-    throw std::runtime_error(
-        "Only column vectors can be converted to doubles/integers");
+    throw std::runtime_error("Only column vectors can be converted to doubles/integers");
   }
 
   using dblint = typename std::conditional<std::is_same<U, doubles>::value,

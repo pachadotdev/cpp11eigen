@@ -13,7 +13,6 @@
 ^pkgdown$
 ^Makefile$
 ^\.clang-format$
+^\.clang-format-ignore$
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
-inst/arxiv_preprint
-inst/rjournal_submission

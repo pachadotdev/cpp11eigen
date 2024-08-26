@@ -43,7 +43,8 @@ inline integers as_integers(const Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dyna
   return Matrix_to_dblint_<int, integers>(x);
 }
 
-inline doubles as_doubles(const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& x) {
+inline doubles as_doubles(
+    const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& x) {
   return Matrix_to_dblint_<double, doubles>(x);
 }
 

@@ -14,7 +14,7 @@
 #include "Jacobi"
 #include "Householder"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 /** \defgroup QR_Module QR module
   *
@@ -45,6 +45,6 @@
 #include "src/QR/ColPivHouseholderQR_LAPACKE.h"
 #endif
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_QR_MODULE_H

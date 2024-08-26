@@ -16,3 +16,5 @@
 ^\.clang-format-ignore$
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
+^inst/include/eigen/src/Core/util/DisableStupidWarnings\.h$
+^inst/include/eigen/src/Core/util/ReenableStupidWarnings\.h$

@@ -16,7 +16,7 @@
 #include "LU"
 #include "Geometry"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 /** \defgroup Eigenvalues_Module Eigenvalues module
   *
@@ -55,6 +55,6 @@
 #include "src/Eigenvalues/SelfAdjointEigenSolver_LAPACKE.h"
 #endif
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_EIGENVALUES_MODULE_H

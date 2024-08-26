@@ -10,7 +10,7 @@
 
 #include "Core"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 /** \defgroup Jacobi_Module Jacobi module
   * This module provides Jacobi and Givens rotations.
@@ -26,7 +26,7 @@
 
 #include "src/Jacobi/Jacobi.h"
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_JACOBI_MODULE_H
 

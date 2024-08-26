@@ -10,7 +10,7 @@
 
 #include "Core"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 /** \defgroup LU_Module LU module
   * This module includes %LU decomposition and related notions such as matrix inversion and determinant.
@@ -42,6 +42,6 @@
   #include "src/LU/arch/InverseSize4.h"
 #endif
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_LU_MODULE_H

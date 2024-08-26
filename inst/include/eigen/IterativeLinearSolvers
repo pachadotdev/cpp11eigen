@@ -11,7 +11,7 @@
 #include "SparseCore"
 #include "OrderingMethods"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 /** 
   * \defgroup IterativeLinearSolvers_Module IterativeLinearSolvers module
@@ -43,6 +43,6 @@
 #include "src/IterativeLinearSolvers/IncompleteLUT.h"
 #include "src/IterativeLinearSolvers/IncompleteCholesky.h"
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_ITERATIVELINEARSOLVERS_MODULE_H

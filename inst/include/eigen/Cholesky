@@ -11,7 +11,7 @@
 #include "Core"
 #include "Jacobi"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 /** \defgroup Cholesky_Module Cholesky module
   *
@@ -40,6 +40,6 @@
 #include "src/Cholesky/LLT_LAPACKE.h"
 #endif
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_CHOLESKY_MODULE_H

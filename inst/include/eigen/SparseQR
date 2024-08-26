@@ -10,7 +10,7 @@
 
 #include "SparseCore"
 #include "OrderingMethods"
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 /** \defgroup SparseQR_Module SparseQR module
   * \brief Provides QR decomposition for sparse matrices
@@ -31,6 +31,6 @@
 #include "src/SparseCore/SparseColEtree.h"
 #include "src/SparseQR/SparseQR.h"
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif

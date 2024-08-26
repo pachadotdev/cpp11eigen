@@ -12,7 +12,7 @@
 #include "Householder"
 #include "Jacobi"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 /** \defgroup SVD_Module SVD module
   *
@@ -45,6 +45,6 @@
 #include "src/SVD/JacobiSVD_LAPACKE.h"
 #endif
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_SVD_MODULE_H

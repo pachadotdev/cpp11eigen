@@ -10,7 +10,7 @@
 
 #include "Core"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 #include <vector>
 #include <map>
@@ -63,7 +63,7 @@
 #include "src/SparseCore/SparseFuzzy.h"
 #include "src/SparseCore/SparseSolverBase.h"
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_SPARSECORE_MODULE_H
 

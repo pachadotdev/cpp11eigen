@@ -10,7 +10,7 @@
 
 #include "SparseCore"
 
-#include "src/Core/util/DisableStupidWarnings.h"
+// #include "src/Core/util/DisableStupidWarnings.h"
 
 extern "C" {
 #include <pastix_nompi.h>
@@ -44,6 +44,6 @@ extern "C" {
 
 #include "src/PaStiXSupport/PaStiXSupport.h"
 
-#include "src/Core/util/ReenableStupidWarnings.h"
+// #include "src/Core/util/ReenableStupidWarnings.h"
 
 #endif // EIGEN_PASTIXSUPPORT_MODULE_H

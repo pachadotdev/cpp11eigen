@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rhistory
+.vscode
+inst/doc
+README.html
+*.o
+*.so
+dev/benchmarks.rds
+dev/benchmarks.r
+dev/benchmarks_cpp11.cpp
+pkgdown

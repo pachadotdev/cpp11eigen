@@ -1,0 +1,4 @@
+Title: R package using eigen
+Binding: start_project
+OpenFiles: README
+Icon: cpp11eigen_small.png

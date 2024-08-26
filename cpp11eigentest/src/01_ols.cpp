@@ -4,8 +4,8 @@ MatrixXd ols_(const doubles_matrix<>& y, const doubles_matrix<>& x) {
   MatrixXd Y = as_Matrix(y);  // Col<double> Y = as_Col(y); also works
   MatrixXd X = as_Matrix(x);
 
-  MatrixXd XtX = X.transpose() * X;        // X'X
-  MatrixXd XtX_inv = XtX.inverse();        // (X'X)^(-1)
+  MatrixXd XtX = X.transpose() * X;             // X'X
+  MatrixXd XtX_inv = XtX.inverse();             // (X'X)^(-1)
   MatrixXd beta = XtX_inv * X.transpose() * Y;  // (X'X)^(-1)(X'Y)
 
   return beta;

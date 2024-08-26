@@ -29,5 +29,5 @@ install:
 
 clang_format=`which clang-format-14`
 
-format: $(shell find . -name '*.h') $(shell find . -name '*.hpp') $(shell find . -name '*.cpp')
+format: $(shell find . -name '*.hpp') $(shell find . -name '*.cpp')
 	@${clang_format} -i $?

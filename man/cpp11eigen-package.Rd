@@ -20,10 +20,5 @@ Useful links:
 \author{
 \strong{Maintainer}: Mauricio Vargas Sepulveda \email{m.sepulveda@mail.utoronto.ca} (\href{https://orcid.org/0000-0003-1017-7574}{ORCID})
 
-Other contributors:
-\itemize{
-  \item Jonathan Schneider Malamud [contributor]
-}
-
 }
 \keyword{internal}

@@ -24,12 +24,12 @@ bindings to R with different design trade-offs and features. cpp11eigen
 aims at providing an additional layer to put the end-user focus on the
 computation instead of configuration [@cpp11].
 
-[Eigen](https://eigen.tuxfamily.org/i) is a linear algebra library for the
-C++ language, aiming towards a good balance between speed and ease of use. It is
-justified in the fact that C++, in its current form, is very valuable to address
-bottlenecks that we find with interpreted languages such as R and Python but it
-does not provide data structures nor functions for linear algebra
-[@Sanderson2016].
+[Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) is a linear
+algebra library for the C++ language, aiming towards a good balance between
+speed and ease of use. It is justified in the fact that C++, in its current
+form, is very valuable to address bottlenecks that we find with interpreted
+languages such as R and Python but it does not provide data structures nor
+functions for linear algebra [@Sanderson2016].
 
 [RcppEigen](https://cran.r-project.org/package=RcppEigen) was first
 published to CRAN in 2011, and it allows to use Eigen via

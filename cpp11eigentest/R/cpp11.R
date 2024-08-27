@@ -16,6 +16,14 @@ eigen_sym_dbl <- function(x) {
   .Call(`_cpp11eigentest_eigen_sym_dbl`, x)
 }
 
+eigen_gen_mat <- function(x) {
+  .Call(`_cpp11eigentest_eigen_gen_mat`, x)
+}
+
+eigen_gen_dbl <- function(x) {
+  .Call(`_cpp11eigentest_eigen_gen_dbl`, x)
+}
+
 chol_mat <- function(x) {
   .Call(`_cpp11eigentest_chol_mat`, x)
 }
@@ -26,6 +34,10 @@ ols_qr_mat <- function(y, x) {
 
 ols_qr_dbl <- function(y, x) {
   .Call(`_cpp11eigentest_ols_qr_dbl`, y, x)
+}
+
+capm <- function(r, m, f) {
+  .Call(`_cpp11eigentest_capm`, r, m, f)
 }
 
 typedef_Col_double <- function(x) {

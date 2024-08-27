@@ -13,8 +13,9 @@ status](https://www.r-pkg.org/badges/version/cpp11eigen)](https://CRAN.R-project
 <!-- badges: end -->
 
 The goal of cpp11eigen is to provide a novel approach to use the [Eigen
-C++ library](https://eigen.tuxfamily.org/) by using the header-only
-cpp11 R package and to simplify things for the end-user.
+C++ library](https://eigen.tuxfamily.org/index.php?title=Main_Page) by
+using the header-only cpp11 R package and to simplify things for the
+end-user.
 
 The idea is to pass matrices/vectors from R to C++, write pure C++/Eigen
 code for the computation, and then export the result back to R with the

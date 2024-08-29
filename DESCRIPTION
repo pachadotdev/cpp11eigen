@@ -4,7 +4,7 @@ Title: An 'Eigen' Interface
 Description: Provides function declarations and inline function definitions that
     facilitate communication between R and the 'Eigen' 'C++' library for
     linear algebra and scientific computing.
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person(
         given = "Mauricio",

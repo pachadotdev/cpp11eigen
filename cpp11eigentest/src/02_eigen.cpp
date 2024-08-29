@@ -8,12 +8,12 @@ MatrixXd eigen_sym_(const doubles_matrix<>& x) {
   return res.compute(X).eigenvalues();
 }
 
-[[cpp11::register]] doubles_matrix<> eigen_sym_mat(const doubles_matrix<>& x) {
+[[cpp11::register]] doubles_matrix<> eigen_sym_mat_no_wrapper(const doubles_matrix<>& x) {
   MatrixXd y = eigen_sym_(x);
   return as_doubles_matrix(y);
 }
 
-[[cpp11::register]] doubles eigen_sym_dbl(const doubles_matrix<>& x) {
+[[cpp11::register]] doubles eigen_sym_dbl_no_wrapper(const doubles_matrix<>& x) {
   MatrixXd y = eigen_sym_(x);
   return as_doubles(y);
 }
@@ -26,7 +26,17 @@ MatrixXcd eigen_gen_(const doubles_matrix<>& x) {
   return res.compute(X).eigenvalues();
 }
 
-[[cpp11::register]] list eigen_gen_mat(const doubles_matrix<>& x) {
+[[cpp11::register]] list eigen_gen_mat_complex_wrapper(const doubles_matrix<>& x) {
+  MatrixXcd y = eigen_gen_(x);
+  return as_complex_matrix(y);
+}
+
+[[cpp11::register]] list eigen_gen_dbl_complex_wrapper(const doubles_matrix<>& x) {
+  MatrixXcd y = eigen_gen_(x);
+  return as_complex_doubles(y);
+}
+
+[[cpp11::register]] list eigen_gen_mat_no_wrapper(const doubles_matrix<>& x) {
   MatrixXcd y = eigen_gen_(x);
 
   MatrixXd y_real = y.real();
@@ -39,7 +49,7 @@ MatrixXcd eigen_gen_(const doubles_matrix<>& x) {
   return out;
 }
 
-[[cpp11::register]] list eigen_gen_dbl(const doubles_matrix<>& x) {
+[[cpp11::register]] list eigen_gen_dbl_no_wrapper(const doubles_matrix<>& x) {
   MatrixXcd y = eigen_gen_(x);
 
   MatrixXd y_real = y.real();

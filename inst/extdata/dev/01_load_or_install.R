@@ -1,5 +1,5 @@
 # run this line if you want to replace all the files provided by the template
-# cpp11armadillo::pkg_template()
+# cpp11eigen::pkg_template()
 
 development <- TRUE
 

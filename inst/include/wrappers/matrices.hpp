@@ -66,7 +66,7 @@ inline Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic> as_Matrix(const intege
 }
 
 ////////////////////////////////////////////////////////////////
-// Armadillo to R
+// Eigen to R
 ////////////////////////////////////////////////////////////////
 
 // Double/Integer
@@ -104,6 +104,26 @@ inline doubles_matrix<> as_doubles_matrix(
 inline integers_matrix<> as_integers_matrix(
     const Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic>& A) {
   return Matrix_to_dblint_matrix_<int, integers_matrix<>>(A);
+}
+
+// Complex
+
+template <typename T>
+inline list Matrix_to_complex_matrix_(
+    const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& A) {
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> A_real = A.real();
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> A_imag = A.imag();
+
+  writable::list B;
+  B.push_back({"real"_nm = as_doubles_matrix(A_real)});
+  B.push_back({"imag"_nm = as_doubles_matrix(A_imag)});
+
+  return B;
+}
+
+inline list as_complex_matrix(
+    const Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic>& A) {
+  return Matrix_to_complex_matrix_<std::complex<double>>(A);
 }
 
 #endif

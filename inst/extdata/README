@@ -1,4 +1,4 @@
-How to use cpp11armadillo?
+How to use cpp11eigen?
 
 1. Start a new project with RStudio.
 2. Open `dev/01_load_or_install.R` and run it.

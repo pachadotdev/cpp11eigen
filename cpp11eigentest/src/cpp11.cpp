@@ -20,31 +20,45 @@ extern "C" SEXP _cpp11eigentest_ols_vec(SEXP y, SEXP x) {
   END_CPP11
 }
 // 02_eigen.cpp
-doubles_matrix<> eigen_sym_mat(const doubles_matrix<>& x);
-extern "C" SEXP _cpp11eigentest_eigen_sym_mat(SEXP x) {
+doubles_matrix<> eigen_sym_mat_no_wrapper(const doubles_matrix<>& x);
+extern "C" SEXP _cpp11eigentest_eigen_sym_mat_no_wrapper(SEXP x) {
   BEGIN_CPP11
-    return cpp11::as_sexp(eigen_sym_mat(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
+    return cpp11::as_sexp(eigen_sym_mat_no_wrapper(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
   END_CPP11
 }
 // 02_eigen.cpp
-doubles eigen_sym_dbl(const doubles_matrix<>& x);
-extern "C" SEXP _cpp11eigentest_eigen_sym_dbl(SEXP x) {
+doubles eigen_sym_dbl_no_wrapper(const doubles_matrix<>& x);
+extern "C" SEXP _cpp11eigentest_eigen_sym_dbl_no_wrapper(SEXP x) {
   BEGIN_CPP11
-    return cpp11::as_sexp(eigen_sym_dbl(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
+    return cpp11::as_sexp(eigen_sym_dbl_no_wrapper(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
   END_CPP11
 }
 // 02_eigen.cpp
-list eigen_gen_mat(const doubles_matrix<>& x);
-extern "C" SEXP _cpp11eigentest_eigen_gen_mat(SEXP x) {
+list eigen_gen_mat_complex_wrapper(const doubles_matrix<>& x);
+extern "C" SEXP _cpp11eigentest_eigen_gen_mat_complex_wrapper(SEXP x) {
   BEGIN_CPP11
-    return cpp11::as_sexp(eigen_gen_mat(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
+    return cpp11::as_sexp(eigen_gen_mat_complex_wrapper(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
   END_CPP11
 }
 // 02_eigen.cpp
-list eigen_gen_dbl(const doubles_matrix<>& x);
-extern "C" SEXP _cpp11eigentest_eigen_gen_dbl(SEXP x) {
+list eigen_gen_dbl_complex_wrapper(const doubles_matrix<>& x);
+extern "C" SEXP _cpp11eigentest_eigen_gen_dbl_complex_wrapper(SEXP x) {
   BEGIN_CPP11
-    return cpp11::as_sexp(eigen_gen_dbl(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
+    return cpp11::as_sexp(eigen_gen_dbl_complex_wrapper(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
+  END_CPP11
+}
+// 02_eigen.cpp
+list eigen_gen_mat_no_wrapper(const doubles_matrix<>& x);
+extern "C" SEXP _cpp11eigentest_eigen_gen_mat_no_wrapper(SEXP x) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(eigen_gen_mat_no_wrapper(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
+  END_CPP11
+}
+// 02_eigen.cpp
+list eigen_gen_dbl_no_wrapper(const doubles_matrix<>& x);
+extern "C" SEXP _cpp11eigentest_eigen_gen_dbl_no_wrapper(SEXP x) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(eigen_gen_dbl_no_wrapper(cpp11::as_cpp<cpp11::decay_t<const doubles_matrix<>&>>(x)));
   END_CPP11
 }
 // 03_chol.cpp
@@ -106,20 +120,22 @@ extern "C" SEXP _cpp11eigentest_typedef_Mat_int(SEXP x) {
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
-    {"_cpp11eigentest_capm",               (DL_FUNC) &_cpp11eigentest_capm,               3},
-    {"_cpp11eigentest_chol_mat",           (DL_FUNC) &_cpp11eigentest_chol_mat,           1},
-    {"_cpp11eigentest_eigen_gen_dbl",      (DL_FUNC) &_cpp11eigentest_eigen_gen_dbl,      1},
-    {"_cpp11eigentest_eigen_gen_mat",      (DL_FUNC) &_cpp11eigentest_eigen_gen_mat,      1},
-    {"_cpp11eigentest_eigen_sym_dbl",      (DL_FUNC) &_cpp11eigentest_eigen_sym_dbl,      1},
-    {"_cpp11eigentest_eigen_sym_mat",      (DL_FUNC) &_cpp11eigentest_eigen_sym_mat,      1},
-    {"_cpp11eigentest_ols_mat",            (DL_FUNC) &_cpp11eigentest_ols_mat,            2},
-    {"_cpp11eigentest_ols_qr_dbl",         (DL_FUNC) &_cpp11eigentest_ols_qr_dbl,         2},
-    {"_cpp11eigentest_ols_qr_mat",         (DL_FUNC) &_cpp11eigentest_ols_qr_mat,         2},
-    {"_cpp11eigentest_ols_vec",            (DL_FUNC) &_cpp11eigentest_ols_vec,            2},
-    {"_cpp11eigentest_typedef_Col_double", (DL_FUNC) &_cpp11eigentest_typedef_Col_double, 1},
-    {"_cpp11eigentest_typedef_Col_int",    (DL_FUNC) &_cpp11eigentest_typedef_Col_int,    1},
-    {"_cpp11eigentest_typedef_Mat_double", (DL_FUNC) &_cpp11eigentest_typedef_Mat_double, 1},
-    {"_cpp11eigentest_typedef_Mat_int",    (DL_FUNC) &_cpp11eigentest_typedef_Mat_int,    1},
+    {"_cpp11eigentest_capm",                          (DL_FUNC) &_cpp11eigentest_capm,                          3},
+    {"_cpp11eigentest_chol_mat",                      (DL_FUNC) &_cpp11eigentest_chol_mat,                      1},
+    {"_cpp11eigentest_eigen_gen_dbl_complex_wrapper", (DL_FUNC) &_cpp11eigentest_eigen_gen_dbl_complex_wrapper, 1},
+    {"_cpp11eigentest_eigen_gen_dbl_no_wrapper",      (DL_FUNC) &_cpp11eigentest_eigen_gen_dbl_no_wrapper,      1},
+    {"_cpp11eigentest_eigen_gen_mat_complex_wrapper", (DL_FUNC) &_cpp11eigentest_eigen_gen_mat_complex_wrapper, 1},
+    {"_cpp11eigentest_eigen_gen_mat_no_wrapper",      (DL_FUNC) &_cpp11eigentest_eigen_gen_mat_no_wrapper,      1},
+    {"_cpp11eigentest_eigen_sym_dbl_no_wrapper",      (DL_FUNC) &_cpp11eigentest_eigen_sym_dbl_no_wrapper,      1},
+    {"_cpp11eigentest_eigen_sym_mat_no_wrapper",      (DL_FUNC) &_cpp11eigentest_eigen_sym_mat_no_wrapper,      1},
+    {"_cpp11eigentest_ols_mat",                       (DL_FUNC) &_cpp11eigentest_ols_mat,                       2},
+    {"_cpp11eigentest_ols_qr_dbl",                    (DL_FUNC) &_cpp11eigentest_ols_qr_dbl,                    2},
+    {"_cpp11eigentest_ols_qr_mat",                    (DL_FUNC) &_cpp11eigentest_ols_qr_mat,                    2},
+    {"_cpp11eigentest_ols_vec",                       (DL_FUNC) &_cpp11eigentest_ols_vec,                       2},
+    {"_cpp11eigentest_typedef_Col_double",            (DL_FUNC) &_cpp11eigentest_typedef_Col_double,            1},
+    {"_cpp11eigentest_typedef_Col_int",               (DL_FUNC) &_cpp11eigentest_typedef_Col_int,               1},
+    {"_cpp11eigentest_typedef_Mat_double",            (DL_FUNC) &_cpp11eigentest_typedef_Mat_double,            1},
+    {"_cpp11eigentest_typedef_Mat_int",               (DL_FUNC) &_cpp11eigentest_typedef_Mat_int,               1},
     {NULL, NULL, 0}
 };
 }

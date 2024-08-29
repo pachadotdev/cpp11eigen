@@ -8,20 +8,28 @@ ols_vec <- function(y, x) {
   .Call(`_cpp11eigentest_ols_vec`, y, x)
 }
 
-eigen_sym_mat <- function(x) {
-  .Call(`_cpp11eigentest_eigen_sym_mat`, x)
+eigen_sym_mat_no_wrapper <- function(x) {
+  .Call(`_cpp11eigentest_eigen_sym_mat_no_wrapper`, x)
 }
 
-eigen_sym_dbl <- function(x) {
-  .Call(`_cpp11eigentest_eigen_sym_dbl`, x)
+eigen_sym_dbl_no_wrapper <- function(x) {
+  .Call(`_cpp11eigentest_eigen_sym_dbl_no_wrapper`, x)
 }
 
-eigen_gen_mat <- function(x) {
-  .Call(`_cpp11eigentest_eigen_gen_mat`, x)
+eigen_gen_mat_complex_wrapper <- function(x) {
+  .Call(`_cpp11eigentest_eigen_gen_mat_complex_wrapper`, x)
 }
 
-eigen_gen_dbl <- function(x) {
-  .Call(`_cpp11eigentest_eigen_gen_dbl`, x)
+eigen_gen_dbl_complex_wrapper <- function(x) {
+  .Call(`_cpp11eigentest_eigen_gen_dbl_complex_wrapper`, x)
+}
+
+eigen_gen_mat_no_wrapper <- function(x) {
+  .Call(`_cpp11eigentest_eigen_gen_mat_no_wrapper`, x)
+}
+
+eigen_gen_dbl_no_wrapper <- function(x) {
+  .Call(`_cpp11eigentest_eigen_gen_dbl_no_wrapper`, x)
 }
 
 chol_mat <- function(x) {

@@ -13,8 +13,6 @@ using namespace cpp11;
 
 // Double/Integer to vector
 
-// we can use std::copy from R to Armadillo, not the other way around
-
 template <typename T, typename U>
 inline U Matrix_to_dblint_(const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& x) {
   const int n = x.rows();
@@ -46,6 +44,26 @@ inline integers as_integers(const Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dyna
 inline doubles as_doubles(
     const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>& x) {
   return Matrix_to_dblint_<double, doubles>(x);
+}
+
+// Complex to vector
+
+template <typename T>
+inline list Matrix_to_complex_dbl_(
+    const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& A) {
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> A_real = A.real();
+  Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> A_imag = A.imag();
+
+  writable::list B;
+  B.push_back({"real"_nm = as_doubles(A_real)});
+  B.push_back({"imag"_nm = as_doubles(A_imag)});
+
+  return B;
+}
+
+inline list as_complex_doubles(
+    const Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic>& A) {
+  return Matrix_to_complex_dbl_<std::complex<double>>(A);
 }
 
 #endif

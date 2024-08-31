@@ -30,6 +30,10 @@ Authors@R: c(
     person(
         family = "Intel Corporation",
         role = "aut",
+        comment = "Eigen library (C++)"),
+    person(
+        family = "Xerox Corporation",
+        role = "aut",
         comment = "Eigen library (C++)")
     )
 Suggests: 

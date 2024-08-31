@@ -26,6 +26,7 @@ Authors:
   \item Gael Guennebaud (Eigen library (C++))
   \item Benot Jacob (Eigen library (C++))
   \item  Intel Corporation (Eigen library (C++))
+  \item  Xerox Corporation (Eigen library (C++))
 }
 
 }

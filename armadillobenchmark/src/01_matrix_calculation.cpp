@@ -10,16 +10,16 @@
 // Creation, transposition, deformation of an NxN matrix
 
 [[cpp11::register]] int matrix_calculation_01_arma_(const int& n) {
-  mat a = randn<mat>(n,n) / 10;
+  mat a = randn<mat>(n, n) / 10;
   mat b = a.t();
-  b.reshape(n/2, n*2);
+  b.reshape(n / 2, n * 2);
   return 0;
 }
 
 // NxN normal distributed random matrix^1000
 
 [[cpp11::register]] int matrix_calculation_02_arma_(const int& n) {
-  mat a = abs(randn<mat>(n,n) / 2);
+  mat a = abs(randn<mat>(n, n) / 2);
   mat b = pow(a, 1000);
   return 0;
 }
@@ -35,7 +35,7 @@
 // NxN cross-product matrix
 
 [[cpp11::register]] int matrix_calculation_04_arma_(const int& n) {
-  mat a = randn<mat>(n,n);
+  mat a = randn<mat>(n, n);
   mat b = a.t() * a;
   return 0;
 }
@@ -43,7 +43,7 @@
 // Linear regression over an NxN matrix
 
 [[cpp11::register]] int matrix_calculation_05_arma_(const int& n) {
-  mat x = randn<mat>(n,n);
+  mat x = randn<mat>(n, n);
   vec y = randn<mat>(n);
   vec c = solve(x.t(), x.t() * y);
   return 0;

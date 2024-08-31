@@ -4,7 +4,7 @@
 #include <omp.h>
 #endif
 
-#include <cpp11.hpp>
 #include <Eigen/Dense>
+#include <cpp11.hpp>
 #include <wrappers/matrices.hpp>
 #include <wrappers/vectors.hpp>

@@ -21,7 +21,8 @@
 
 [[cpp11::register]] int matrix_calculation_02_eigen_(const int& n) {
   std::normal_distribution<double> d(0, 1);
-  MatrixXd a = MatrixXd::NullaryExpr(n, n, [&]() { return std::abs(d(random_normal())); }) / 2;
+  MatrixXd a =
+      MatrixXd::NullaryExpr(n, n, [&]() { return std::abs(d(random_normal())); }) / 2;
   MatrixXd b = a.array().pow(1000);
   return 0;
 }

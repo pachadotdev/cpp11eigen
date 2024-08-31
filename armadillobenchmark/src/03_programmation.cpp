@@ -22,10 +22,10 @@
 // Creation of an NxN Hilbert matrix
 
 [[cpp11::register]] int programmation_02_arma_(const int& n) {
-  mat a(n,n);
+  mat a(n, n);
   for (int i = 0; i < n; ++i) {
     for (int j = 0; j < n; ++j) {
-      a(i,j) = 1.0 / (i + j + 1);
+      a(i, j) = 1.0 / (i + j + 1);
     }
   }
   return 0;
@@ -46,7 +46,7 @@ int gcd(int a, int b) {
   vec b = ceil(randu<vec>(n) * 1000);
   vec c(n);
   for (int i = 0; i < n; ++i) {
-    c(i) = gcd(a(i), b(i)); // gcd is a recursive function
+    c(i) = gcd(a(i), b(i));  // gcd is a recursive function
   }
   return 0;
 }
@@ -68,14 +68,14 @@ int gcd(int a, int b) {
 [[cpp11::register]] int programmation_05_arma_(const int& n) {
   mat x = abs(randn<mat>(n, n));
   vec vt = linspace<vec>(1, n, n);  // Variables to test
-  vec vr(n); // Result: ordered variables
-  vec RV(n); // Result: correlations
+  vec vr(n);                        // Result: ordered variables
+  vec RV(n);                        // Result: correlations
   mat x2, R, Ryy, Rxx, Rxy, Ryx;
   double vrt, Rvmax, trace_Ryx_Rxy, trace_Ryy_Ryy, trace_Rxx_Rxx, rvt;
 
-  for (int j = 0; j < n; ++j) { // loop on the variable number
+  for (int j = 0; j < n; ++j) {  // loop on the variable number
     Rvmax = 0;
-    for (int k = 0; k < (n - j); ++k) { // loop on the variables
+    for (int k = 0; k < (n - j); ++k) {  // loop on the variables
       if (j == 0) {
         x2 = join_horiz(x, x.col(vt(k) - 1));
       } else {
@@ -92,15 +92,15 @@ int gcd(int a, int b) {
       trace_Rxx_Rxx = trace(Rxx * Rxx);
       rvt = trace_Ryx_Rxy / sqrt(trace_Ryy_Ryy * trace_Rxx_Rxx);  // RV calculation
       if (rvt > Rvmax) {
-        Rvmax = rvt; // test of RV
-        vrt = vt(k); // temporary held variable
+        Rvmax = rvt;  // test of RV
+        vrt = vt(k);  // temporary held variable
       }
     }
-    vr(j) = vrt;   // Result: variable
-    RV(j) = Rvmax; // Result: correlation
+    vr(j) = vrt;    // Result: variable
+    RV(j) = Rvmax;  // Result: correlation
     uvec idx = find(vt == vr(j));
     if (!idx.is_empty()) {
-      vt.shed_row(idx(0)); // reidentify variables to test
+      vt.shed_row(idx(0));  // reidentify variables to test
     }
   }
   return 0;

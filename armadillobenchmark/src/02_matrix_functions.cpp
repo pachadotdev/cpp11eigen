@@ -18,7 +18,7 @@
 // Eigenvalues of an NxX random matrix
 
 [[cpp11::register]] int matrix_functions_02_arma_(const int& n) {
-  mat a = randn<mat>(n,n);
+  mat a = randn<mat>(n, n);
   cx_vec b = eig_gen(a);
   return 0;
 }
@@ -26,7 +26,7 @@
 // Determinant of an NxN random matrix
 
 [[cpp11::register]] int matrix_functions_03_arma_(const int& n) {
-  mat a = randn<mat>(n,n);
+  mat a = randn<mat>(n, n);
   double b = det(a);  // creates warning: unused variable ‘b’ but it's ok
   return 0;
 }
@@ -34,7 +34,7 @@
 // Cholesky decomposition of an NxN matrix
 
 [[cpp11::register]] int matrix_functions_04_arma_(const int& n) {
-  mat a = randn<mat>(n,n);
+  mat a = randn<mat>(n, n);
   a = a.t() * a;
   mat b = chol(a);
   return 0;
@@ -43,7 +43,7 @@
 // Inverse of an NxN random matrix
 
 [[cpp11::register]] int matrix_functions_05_arma_(const int& n) {
-  mat a = randn<mat>(n,n);
+  mat a = randn<mat>(n, n);
   mat b = inv(a);
   return 0;
 }

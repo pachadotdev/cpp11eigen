@@ -11,7 +11,8 @@
 
 [[cpp11::register]] int programmation_01_eigen_(const int& n) {
   double phi = 1.6180339887498949;
-  VectorXd a = (VectorXd::Random(n) * 1000).unaryExpr([](double x) { return std::floor(x); });
+  VectorXd a =
+      (VectorXd::Random(n) * 1000).unaryExpr([](double x) { return std::floor(x); });
   VectorXd b(n);
   for (int i = 0; i < n; ++i) {
     b(i) = (pow(phi, a(i)) - pow(-phi, -a(i))) / sqrt(5);
@@ -22,10 +23,10 @@
 // Creation of an NxN Hilbert matrix
 
 [[cpp11::register]] int programmation_02_eigen_(const int& n) {
-  MatrixXd a(n,n);
+  MatrixXd a(n, n);
   for (int i = 0; i < n; ++i) {
     for (int j = 0; j < n; ++j) {
-      a(i,j) = 1.0 / (i + j + 1);
+      a(i, j) = 1.0 / (i + j + 1);
     }
   }
   return 0;
@@ -42,11 +43,13 @@ int gcd(int a, int b) {
 }
 
 [[cpp11::register]] int programmation_03_eigen_(const int& n) {
-  VectorXd a = (VectorXd::Random(n) * 1000).unaryExpr([](double x) { return std::ceil(x); });
-  VectorXd b = (VectorXd::Random(n) * 1000).unaryExpr([](double x) { return std::ceil(x); });
+  VectorXd a =
+      (VectorXd::Random(n) * 1000).unaryExpr([](double x) { return std::ceil(x); });
+  VectorXd b =
+      (VectorXd::Random(n) * 1000).unaryExpr([](double x) { return std::ceil(x); });
   VectorXd c(n);
   for (int i = 0; i < n; ++i) {
-    c(i) = gcd(a(i), b(i)); // gcd is a recursive function
+    c(i) = gcd(a(i), b(i));  // gcd is a recursive function
   }
   return 0;
 }
@@ -78,7 +81,8 @@ MatrixXd cor(const MatrixXd& x) {
 
 [[cpp11::register]] int programmation_05_eigen_(const int& n) {
   std::normal_distribution<double> d(0, 1);
-  MatrixXd x = MatrixXd::NullaryExpr(n, n, [&]() { return std::abs(d(random_normal())); });
+  MatrixXd x =
+      MatrixXd::NullaryExpr(n, n, [&]() { return std::abs(d(random_normal())); });
 
   // Variables to test
   VectorXd vt = Eigen::VectorXd::LinSpaced(n, 1, n);

@@ -2,6 +2,8 @@
 
 * Wrappers for complex numbers.
 * Expanded range of tests.
+* Adds benchmarks.
+* Includes unsupported Eigen modules (i.e., FFT).
 
 # cpp11eigen 0.1
 

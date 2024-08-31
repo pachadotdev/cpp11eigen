@@ -88,7 +88,7 @@ cpp_vendor <- function(dir = NULL, subdir = "/inst/include") {
 
   current_eigen <- system.file(
     "include",
-    "eigen",
+    "Eigen",
     package = "cpp11eigen"
   )
 

@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/pachadotdev/cpp11eigen/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pachadotdev/cpp11eigen/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/pachadotdev/cpp11eigen/graph/badge.svg?token=mWfiUCgfNu)](https://app.codecov.io/gh/pachadotdev/cpp11eigen)
+[![codecov](https://codecov.io/gh/pachadotdev/cpp11eigen/graph/badge.svg?token=F2AaMydPfu)](https://app.codecov.io/gh/pachadotdev/cpp11eigen)
 [![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-donate-white.svg)](https://buymeacoffee.com/pacha)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/cpp11eigen)](https://CRAN.R-project.org/package=cpp11eigen)

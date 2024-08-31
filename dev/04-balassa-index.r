@@ -43,3 +43,5 @@ bench <- mark(
 )
 
 as.numeric(bench::as_bench_time(bench$median))
+
+saveRDS(bench, "dev/benchmarks-balassa-index.rds")

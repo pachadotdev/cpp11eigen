@@ -2,9 +2,9 @@
 // or errors
 #pragma GCC diagnostic ignored "-Wignored-attributes"
 
-#include <eigen/Dense>
-#include <eigen/Eigenvalues>
-#include <eigen/Cholesky>
+#include <Eigen/Dense>
+#include <Eigen/Eigenvalues>
+#include <Eigen/Cholesky>
 
 #include <cpp11.hpp>
 #include <wrappers/matrices.hpp>

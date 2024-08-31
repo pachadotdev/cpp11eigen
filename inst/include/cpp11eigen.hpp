@@ -5,6 +5,6 @@
 #endif
 
 #include <cpp11.hpp>
-#include <eigen/Dense>
+#include <Eigen/Dense>
 #include <wrappers/matrices.hpp>
 #include <wrappers/vectors.hpp>

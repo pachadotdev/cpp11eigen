@@ -2,7 +2,8 @@
 // or errors
 #pragma GCC diagnostic ignored "-Wignored-attributes"
 
-#include <eigen/Dense>
+// add extra Eigen headers here
+// cpp11eigen.hpp only includes eigen/Dense
 // #include <eigen/Eigenvalues>
 // #include <eigen/Cholesky>
 

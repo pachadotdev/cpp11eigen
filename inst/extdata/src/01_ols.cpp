@@ -1,11 +1,4 @@
-// clang-format off
-
-#include <eigen/Dense>
-#include <cpp11.hpp>
-#include <cpp11eigen.hpp>
-
-using namespace Eigen;
-using namespace cpp11;
+#include "00_main.h"
 
 MatrixXd ols_(const doubles_matrix<>& y, const doubles_matrix<>& x) {
   MatrixXd Y = as_Matrix(y);  // Col<double> Y = as_Col(y); also works

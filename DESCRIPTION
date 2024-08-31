@@ -11,7 +11,26 @@ Authors@R: c(
         family = "Vargas Sepulveda",
         role = c("aut", "cre"),
         email = "m.sepulveda@mail.utoronto.ca",
-        comment = c(ORCID = "0000-0003-1017-7574"))
+        comment = c(ORCID = "0000-0003-1017-7574")),
+    person(
+        given = "Gael",
+        family = "Guennebaud",
+        role = "aut",
+        comment = "Eigen library (C++)"),
+    person(
+        given = "Gael",
+        family = "Guennebaud",
+        role = "aut",
+        comment = "Eigen library (C++)"),
+    person(
+        given = "Benot",
+        family = "Jacob",
+        role = "aut",
+        comment = "Eigen library (C++)"),
+    person(
+        family = "Intel Corporation",
+        role = "aut",
+        comment = "Eigen library (C++)")
     )
 Suggests: 
     cpp11,

@@ -20,5 +20,13 @@ Useful links:
 \author{
 \strong{Maintainer}: Mauricio Vargas Sepulveda \email{m.sepulveda@mail.utoronto.ca} (\href{https://orcid.org/0000-0003-1017-7574}{ORCID})
 
+Authors:
+\itemize{
+  \item Gael Guennebaud (Eigen library (C++))
+  \item Gael Guennebaud (Eigen library (C++))
+  \item Benot Jacob (Eigen library (C++))
+  \item  Intel Corporation (Eigen library (C++))
+}
+
 }
 \keyword{internal}

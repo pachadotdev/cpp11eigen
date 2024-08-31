@@ -13,25 +13,9 @@
   std::normal_distribution<double> d(0, 1);
   VectorXd a = VectorXd::NullaryExpr(n, [&]() { return d(random_normal()); });
 
-  fftw_complex* in = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * n);
-  fftw_complex* out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * n);
-
-  for (int i = 0; i < n; ++i) {
-    in[i][0] = a[i];  // Real part
-    in[i][1] = 0.0;   // Imaginary part
-  }
-
-  fftw_plan p = fftw_plan_dft_1d(n, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-  fftw_execute(p);
-
-  VectorXcd b(n);
-  for (int i = 0; i < n; ++i) {
-    b[i] = std::complex<double>(out[i][0], out[i][1]);
-  }
-
-  fftw_destroy_plan(p);
-  fftw_free(in);
-  fftw_free(out);
+  Eigen::FFT<double> fft;
+  Eigen::VectorXcd b(n);
+  fft.fwd(b, a);
 
   return 0;
 }

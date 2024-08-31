@@ -23,8 +23,7 @@ test_that("cpp11eigen vs base R (sorted)", {
   e <- sort(eigen(x)$values)
 
   expect_equal(a, e)
-  expect_equal(b_real, e)
-  expect_equal(b_imag, rep(0, length(b_imag)))
+  expect_equal(b, e)
   expect_equal(c_real, e)
   expect_equal(c_imag, rep(0, length(c_imag)))
   expect_equal(d_real, e)

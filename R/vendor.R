@@ -75,7 +75,13 @@ cpp_vendor <- function(dir = NULL, subdir = "/inst/include") {
   # Vendor cpp11eigen ----
 
   dir.create(
-    file.path(path, "eigen"),
+    file.path(path, "Eigen"),
+    recursive = TRUE,
+    showWarnings = FALSE
+  )
+
+  dir.create(
+    file.path(path, "unsupported"),
     recursive = TRUE,
     showWarnings = FALSE
   )
@@ -89,6 +95,12 @@ cpp_vendor <- function(dir = NULL, subdir = "/inst/include") {
   current_eigen <- system.file(
     "include",
     "Eigen",
+    package = "cpp11eigen"
+  )
+
+  current_unsupported <- system.file(
+    "include",
+    "unsupported",
     package = "cpp11eigen"
   )
 
@@ -117,7 +129,12 @@ cpp_vendor <- function(dir = NULL, subdir = "/inst/include") {
 
   copy_files(
     list.files(current_eigen, full.names = TRUE, recursive = TRUE),
-    path, "eigen", eigen_header
+    path, "Eigen", eigen_header
+  )
+
+  copy_files(
+    list.files(current_unsupported, full.names = TRUE, recursive = TRUE),
+    path, "unsupported", eigen_header
   )
 
   copy_files(

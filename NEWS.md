@@ -4,6 +4,7 @@
 * Expanded range of tests.
 * Adds benchmarks.
 * Includes unsupported Eigen modules (i.e., FFT).
+* Add unsupported Eigen modules to vendoring.
 
 # cpp11eigen 0.1
 

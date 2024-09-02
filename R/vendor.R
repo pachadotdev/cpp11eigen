@@ -69,7 +69,7 @@ cpp_vendor <- function(dir = NULL, subdir = "/inst/include") {
 
   copy_files(
     list.files(current_cpp11, full.names = TRUE),
-    path, "cpp11", cpp11_header
+    path, cpp11_header
   )
 
   # Vendor cpp11eigen ----
@@ -128,18 +128,20 @@ cpp_vendor <- function(dir = NULL, subdir = "/inst/include") {
   )
 
   copy_files(
-    list.files(current_eigen, full.names = TRUE, recursive = TRUE),
-    path, "Eigen", eigen_header
+    list.files(current_eigen, full.names = TRUE, include.dirs = TRUE,
+      recursive = TRUE),
+    path, eigen_header
   )
 
   copy_files(
-    list.files(current_unsupported, full.names = TRUE, recursive = TRUE),
-    path, "unsupported", eigen_header
+    list.files(current_unsupported, full.names = TRUE, include.dirs = TRUE,
+      recursive = TRUE),
+    path, eigen_header
   )
 
   copy_files(
     list.files(current_wrappers, full.names = TRUE),
-    path, "wrappers", eigen_header
+    path, eigen_header
   )
 
   # Additional steps to make vendoring work ----
@@ -166,11 +168,26 @@ write_header <- function(path, header, pkg, eigen_header) {
   )
 }
 
-copy_files <- function(files, path, out, eigen_header) {
+copy_files <- function(files, path, eigen_header) {
+  dirs <- c()
+  for (f in files) {
+    if (file.info(f)$isdir) {
+      dirs <- c(dirs, f)
+    }
+  }
+
+  files <- files[!files %in% dirs]
+
+  dirs <- unique(gsub(".*/include/", "", dirs))
+
+  for (d in dirs) {
+    dir.create(file.path(path, d), recursive = TRUE)
+  }
+
   for (f in files) {
     writeLines(
-      c(eigen_header, readLines(f)),
-      file.path(path, out, basename(f))
+      c(eigen_header, readLines(f)), file.path(path,
+        gsub(".*/include/", "", f))
     )
   }
 }

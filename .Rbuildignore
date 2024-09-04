@@ -6,9 +6,7 @@
 ^\.github$
 ^\.vscode$
 ^dev$
-^armadillobenchmark$
-^basebenchmark$
-^eigenbenchmark$
+^benchmarks$
 ^LICENSE\.md$
 ^README\.Rmd$
 ^README\.html$

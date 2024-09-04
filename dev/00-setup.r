@@ -6,7 +6,7 @@ library(bench)
 run_benchmark <- function(FUN1, FUN2, FUN3, n, name) {
   message(n)
 
-  fout <- paste0("dev/benchmarks-", name, "-", n, ".rds")
+  fout <- paste0("benchmarks/benchmarks-", name, "-", n, ".rds")
 
   if (!file.exists(fout)) {
     out <- mark(

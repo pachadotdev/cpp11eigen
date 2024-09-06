@@ -1,6 +1,6 @@
 ---
-title: "Armadillo and Eigen: A Tale of Two Linear Algebra Libraries"
-date: 2024-08-29
+title: "Welding R and C++: A Tale of Two Programming Languages"
+date: 2024-09-06
 author1: "Mauricio Vargas Sepúlveda (ORCID 0000-0003-1017-7574)"
 email1: m.sepulveda@mail.utoronto.ca
 affiliation11: Department of Political Science, University of Toronto
@@ -25,14 +25,14 @@ outline: true
 
 # Abstract
 
-This article introduces `cpp11eigen`, a new R package that integrates the
-powerful Eigen C++ library for linear algebra into the R programming
-environment. This article provides a detailed comparison between Armadillo and
-Eigen speed and syntax. The `cpp11eigen` package simplifies a part of the
-process of using C++ within R by offering additional ease of integration for
-those who require high-performance linear algebra operations in their R
-workflows. This work aims to discuss the tradeoff between computational
-efficiency and accessibility.
+This article introduces `cpp11armadillo` and `cpp11eigen`, new R package that
+integrate the powerful Armadillo and Eigen C++ libraries for linear algebra into
+the R programming environment. This article provides a detailed comparison
+between Armadillo and Eigen speed and syntax. The goal of these packages is to
+simplify a part of the process of solving bottlenecks by using C++ within R,
+these offer additional ease of integration for users who require
+high-performance linear algebra operations in their R workflows. This document
+aims to discuss the tradeoff between computational efficiency and accessibility.
 
 # Introduction
 
@@ -40,43 +40,115 @@ R is widely used by non-programmers [@wickham2019], and this article aims to
 introduce benchmarks in a non-technical yet formal manner for social scientists.
 Our goal is to provide a fair comparison between Eigen and Armadillo, being both
 highly efficient linear algebra libraries written in C++. We do it by using
-[`cpp11eigen`](https://pacha.dev/cpp11eigen) and
-[`cpp11armadillo`](https://pacha.dev/cpp11armadillo).
+[`cpp11armadillo`](https://pacha.dev/cpp11armadillo) and
+[`cpp11eigen`](https://pacha.dev/cpp11eigen).
+
+[Armadillo](https://arma.sourceforge.net/) is a C++ library designed for
+linear algebra, emphasizing a balance between performance and ease of use.
+C++ is highly efficient for computationally intensive tasks but lacks built-in
+data structures and functions for linear algebra operations. Armadillo fills
+this gap by providing an intuitive syntax similar to MATLAB [@sanderson2016].
 
 [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) emphasizes
 flexibility and speed, while [Armadillo](http://arma.sourceforge.net/) focuses
 on a balance between speed and easy of use.
 
-['RcppEigen'](https://cran.r-project.org/package=RcppEigen), introduced in 2011,
-integrates Eigen with R through the Rcpp package, enabling the use of C++ for
-performance-critical parts of R code.
-['RcppArmadillo'](https://cran.r-project.org/package=RcppArmadillo) has a
-similar goal [@sanderson2016; @eddelbuettel2014]. At the time of writing this
-article, 247 CRAN packages depend on 'RcppEigen', 755 on 'RcppArmadillo'
-[@lee2024], and therefore these are highly successful packages.
+[`RcppArmadillo`](https://cran.r-project.org/package=RcppArmadillo), introduced
+in 2010, integrates R and Armadillo [@sanderson2016; @eddelbuettel2014]. [`RcppEigen`](https://cran.r-project.org/package=RcppEigen), introduced in 2011, integrates Eigen with R through the Rcpp
+package, enabling the use of C++ for performance-critical parts of R code. At
+the time of writing this document, 732 CRAN packages depend on 'RcppArmadillo' and
+238 on 'RcppEigen' [@lee2024], and therefore these are highly successful
+packages considering that the median number of reverse dependencies for CRAN packages is five and the distribution of dependencies situates these packages as top one percent.
 
-`cpp11eigen` is an independent project that aims to simplify the integration of
-R and C++ by using 'cpp11', an R package that eases using C++ functions from R.
-A distinctive characteristics of `cpp11eigen` is the vendoring capability,
-meaning that it allows to copy its code into a project, making it a one-time
-dependency with a fixed and stable code until it is updated, and it is
-useful in restricted environments such as servers and clusters
+The following plot situates RcppArmadillo and RcppEigen in the R ecosystem [@lee2024, @ggplot2, @tintin]:
+
+```{r quantiles, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=4}
+library(ggplot2)
+library(dplyr)
+library(tintin)
+library(forcats)
+
+d <- cran_dependencies %>%
+  filter(type != "suggests") %>%
+  group_by(to) %>%
+  count()
+
+d %>%
+  filter(to %in% c("RcppArmadillo", "RcppEigen"))
+  
+quantile(d$n, probs = c(0.95, 0.98, 0.99))
+
+d <- d %>%
+  filter(n >= 100)
+
+# create histogram
+
+clr <- tintin_clrs(1, option = "tintin in the land of the soviets")
+
+ggplot(d) +
+  geom_density(aes(n), fill = clr) +
+  labs(
+    title = "Number of dependencies for CRAN packages",
+    subtitles = "Excluding packages with less than 100 dependencies",
+    x = "Number of reverse dependencies",
+    y = "Density"
+  ) +
+  # add vertical lines at 259 and 790
+  geom_vline(xintercept = c(259, 790), linetype = "dashed") +
+  annotate(
+    geom = "text",
+    x = 259, y = 0.003, label = "RcppEigen",
+    hjust = -0.1, vjust = 0, size = 5
+  ) +
+  annotate(
+    geom = "text",
+    x = 790, y = 0.003, label = "RcppArmadillo",
+    hjust = -0.1, vjust = 0, size = 5
+  ) +
+  theme_minimal(base_size = 13)
+```
+
+```{r quantiles2, echo=FALSE, warning=FALSE, message=FALSE}
+# copy and paste reverse linking
+# https://cran.r-project.org/web/packages/cpp11/index.html
+
+# cpp11 goes to LinkingTo and not Depends, so lee2024 does not count it
+text <- "ambient, area, arrow, bignum, bigrquery, binpackr, BiocParallel, carbondate, cheapr, clock, CMF, cppdoubles, CytoML, deformula, densityClust, epiworldR, flowCore, flowWorkspace, ggraph, haven, heumilkr, hilbert, httpgd, igraph, jinjar, literanger, lobstr, lzstring, marquee, meltr, mice, minty, MOSim, myTAI, ncdfFlow, openCyto, particles, poputils, rar, RcppAlgos, RcppBigIntAlgos, readNSx, readr, readxl, rjsoncons, RMariaDB, roxygen2, RPostgres, RSQLite, shide, shinytest2, sift, SpatialKDE, spatialsample, supercells, svglite, systemfonts, tardis, textrecipes, textshaping, tidyfast, tidygraph, tidyr, timechange, timeplyr, tipitaka, transformr, triangulr, triptych, tweenr, twosamples, tzdb, unigd, vdiffr, vroom, websocket"
+
+# Count the number of commas
+num_commas <- stringr::str_count(text, ",")
+num_commas
+```
+
+`cpp11armadillo` and `cpp11eigen` are independent project that aim to simplify
+the integration of R and C++ by using `cpp11`, an R package introduced in 2020
+that eases calling C++ functions from R, it is currently used as a dependency
+by 75 CRAN packages, and it is in the top one percent of CRAN packages.
+
+A distinctive characteristic of `cpp11armadillo` and `cpp11eigen` is the
+vendoring capability, meaning that it allows to copy its code into a project,
+making it a one-time dependency with a fixed and stable code until it is
+manually updated. This feature is useful in restricted environments such as
+servers and clusters where sometimes there are restrictions to software
+installation or the internet connections are limited for security reasons
 [@wickham2019; @cpp11].
 
-`cpp11armadillo` offers similar features and both libraries are useful in cases
-where vectorization (e.g., applying an operation to a vector or matrix as a
-whole instead of looping over each element) is not possible or challenging. A
-detailed discussion and examples about why and when (and when not) rewriting R
-code in C++ is useful can be found in @burns2011r and @vargas2024a.
+`cpp11armadillo` and `cpp11eigen` are useful in cases where vectorization (e.g.,
+applying an operation to a vector or matrix as a whole instead of looping over
+each element) is not possible or challenging. A detailed discussion and examples
+about why and when (and when not) rewriting R code in C++ is useful can be found
+in @burns2011r. We followed four design principles when developing these two
+packages as in: column oriented, package oriented, header-only,
+and vendoring capable. The details of the `cpp11armadillo` implementation, which
+is similar to `cpp11eigen`, can be found in @vargas2024b.
 
-We followed four design principles when developing `cpp11eigen`, same as
-`cpp11armadillo` [@vargas2024b]: column oriented, package oriented, header-only,
-and vendoring capable.
-
-# Syntax and benchmarks
+# Syntax
 
 One possibility is to start by creating minimal R packages with the provided
-templates.
+templates. These templates provide a general case for a package that includes
+the necessary files to create a package that uses Armadillo or Eigen, including
+a generic `Makevars` file that can be adapted to link to specific numerical
+libraries such as Intel MKL or OpenBLAS.
 
 ```r
 remotes::install_github("pachadotdev/cpp11armadillo")
@@ -87,10 +159,10 @@ cpp11eigen::create_package("eigenbenchmark")
 ```
 
 Comparing numerical libraries requires to write equivalent codes. For instance,
-in R we can use `apply()` functions while in C++ we need to write a `for` loop,
-and this allows a fair comparison between the two libraries. However, R has
-heavily optimized functions that also verify the input data, such as `lm()` and
-`glm()`, that do not have a direct equivalent in Armadillo or Eigen, and for a
+in R we use `apply()` while its C++ equivalent is a `for` loop, and this allows
+a fair comparison between the two libraries. However, R has heavily optimized
+functions that also verify the input data, such as `lm()` and `glm()`, which do
+not have a direct equivalent in Armadillo or Eigen, and for a
 fair comparison the options are to write a simplified function for the linear
 model in R or to write a more complex function in C++.
 
@@ -100,10 +172,11 @@ widely used in the R community.
 
 The first test in the ATT benchmark is the creation, transposition and
 deformation of an $N \times N$ matrix ($2,500 \times 2,500$ in the original
-test). The R code comparable to the Armadillo
-code is:
+test). The R and Armadillo codes for this operation are:
 
 ```r
+# R
+
 matrix_calculation_01_r <- function(n) {
   a <- matrix(rnorm(n * n) / 10, ncol = n, nrow = n)
   b <- t(a)
@@ -113,9 +186,9 @@ matrix_calculation_01_r <- function(n) {
 }
 ```
 
-The Armadillo code is very similar:
-
 ```cpp
+// C++
+
 #include <cpp11.hpp>
 #include <cpp11armadillo.hpp>
 
@@ -132,9 +205,12 @@ using namespace cpp11;
 ```
 
 The Eigen code requires to create a function to draw random numbers from a
-normal distribution but it has a built-in function for the uniform distribution:
+normal distribution because it only provides a built-in function for the uniform
+distribution:
 
 ```cpp
+// C++
+
 #include <cpp11.hpp>
 #include <cpp11eigen.hpp>
 #include <random>
@@ -155,7 +231,7 @@ std::mt19937& random_normal() {
     return d(random_normal());
   }) / 10;
 
-  // for the uniform distribution this is simpler
+  // for the uniform distribution this is just
   // MatrixXd a = MatrixXd::Random(n, n) / 10;
 
   MatrixXd b = a.transpose();
@@ -164,14 +240,22 @@ std::mt19937& random_normal() {
 }
 ```
 
-The functions to do not move data between R and C++, and this is intentional to
-focus on the performance of the linear algebra libraries and not adding overhead
-from data transfer in the benchmarks. Each function creates a matrix and
-conducts equivalent operations on it. The returned value is zero in R and C++
-in case that the functions run without errors.
+# Benchmarks without data transfer
 
-The benchmarks were conducted on a ThinkPad X1 Carbon Gen 9 with the following
-specifications:
+The functions in the previous section to do not move data between R and C++,
+this is intentional to focus on the performance of the linear algebra libraries
+and not adding overhead from data transfer in the benchmarks. Each function
+creates a matrix and conducts equivalent operations on it. The returned value is
+zero in R and C++ in case that the functions run without errors.
+
+We decided to run the benchmarks on a local machine and on a cluster to provide
+a comparison between the two environments and test how the benchmarks change
+when the input data is increased.
+
+## Local benchmarks
+
+The local benchmarks were conducted on a ThinkPad X1 Carbon Gen 9 with the
+following specifications:
 
 - Processor: Intel Core i7-1185G7 with eight cores
 - Memory: 16 GB LPDDR4Xx-4266
@@ -185,7 +269,7 @@ benchmarks are as follows:
 ```{r results, echo=FALSE, warning=FALSE, message=FALSE}
 library(knitr)
 
-d <- readRDS("tables.rds")
+d <- readRDS("tables-laptop-small.rds")
 
 d1 <- d$d1
 d2 <- d$d2
@@ -234,6 +318,117 @@ results. The ATT benchmark is a good starting point, but it does not cover
 mundane tasks such as data manipulation, and it is important to consider the
 tradeoff between computational efficiency and ease of use.
 
+## Cluster benchmarks
+
+The cluster benchmarks were conducted on one cluster node of the
+[Niagara supercomputer](https://docs.alliancecan.ca/wiki/Niagara) maintained by
+the Digital Research Alliance of Canada, which has the following specifications:
+
+- Processor: 2 sockets with 20 Intel Skylake cores (2.4GHz, AVX512), for a
+  total of 40 cores per node
+- Memory: 202 GB
+- Operating System: CentOS 7
+- R Version: 4.2.2
+- BLAS Library: Intel MKL 2019.4.243
+
+The median times for the adapted and comparable implementations of the ATT
+benchmarks are as follows:
+
+```{r results2, echo=FALSE, warning=FALSE, message=FALSE}
+d <- readRDS("tables-niagara-small.rds")
+
+d1 <- d$d1
+d2 <- d$d2
+d3 <- d$d3
+
+d1$operation <- paste0(d1$operation, " - ", d1$software)
+d2$operation <- paste0(d2$operation, " - ", d2$software)
+d3$operation <- paste0(d3$operation, " - ", d3$software)
+
+d1 <- d1[, c(1, 3, 5)]
+d2 <- d2[, c(1, 3, 5)]
+d3 <- d3[, c(1, 3, 5)]
+
+kable(
+  d1,
+  caption = "Matrix calculation",
+  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Time (s)", "Rank"),
+  # align = c("l", "r", "r", "r")
+  align = c("l", "r", "r")
+)
+
+kable(
+  d2,
+  caption = "Matrix functions",
+  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Time (s)", "Rank"),
+  # align = c("l", "r", "r", "r")
+  align = c("l", "r", "r")
+)
+
+kable(
+  d3,
+  caption = "Programmation",
+  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Time (s)", "Rank"),
+  # align = c("l", "r", "r", "r")
+  align = c("l", "r", "r")
+)
+```
+
+Repeating the same after multiplicating the number of rows and columns by five
+leads to the following results:
+
+```{r results3, echo=FALSE, warning=FALSE, message=FALSE}
+d <- readRDS("tables-niagara-large.rds")
+
+d1 <- d$d1
+d2 <- d$d2
+d3 <- d$d3
+
+d1$operation <- paste0(d1$operation, " - ", d1$software)
+d2$operation <- paste0(d2$operation, " - ", d2$software)
+d3$operation <- paste0(d3$operation, " - ", d3$software)
+
+d1 <- d1[, c(1, 3, 5)]
+d2 <- d2[, c(1, 3, 5)]
+d3 <- d3[, c(1, 3, 5)]
+
+kable(
+  d1,
+  caption = "Matrix calculation",
+  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Time (s)", "Rank"),
+  # align = c("l", "r", "r", "r")
+  align = c("l", "r", "r")
+)
+
+kable(
+  d2,
+  caption = "Matrix functions",
+  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Time (s)", "Rank"),
+  # align = c("l", "r", "r", "r")
+  align = c("l", "r", "r")
+)
+
+kable(
+  d3,
+  caption = "Programmation",
+  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Time (s)", "Rank"),
+  # align = c("l", "r", "r", "r")
+  align = c("l", "r", "r")
+)
+```
+
+The results are consistent with the local benchmarks, and Armadillo leads in
+most of the tests. The benchmarks are also consistent with the time complexity
+of the algorithms, meaning that doubling the size of the matrix does not double
+the time to run the function unless the function has a time complexity of
+$O(n)$.
+
 # Comparison with R packages
 
 The syntax and speed differences posit a similar case to the tradeoff between
@@ -252,8 +447,8 @@ mtcars %>%
 as.data.table(mtcars)[, lapply(.SD, mean), by = cyl]
 ```
 
-The benchmark for the grouped means reveals that `dplyr` has a median time of
-2.7 ms and `data.table` has a median time of 600 $\mu$s, and this means that
+The local benchmark for the grouped means reveals that `dplyr` has a median time
+of 2.7 ms and `data.table` has a median time of 600 $\mu$s, meaning that
 `dplyr` is four times slower than `data.table` at this task. The syntax of
 `dplyr` is easier to understand for non-programmers, but `data.table` can be
 equally expressive for users who are familiar with its syntax.
@@ -263,8 +458,7 @@ intensive tasks, rewriting R code in C++ can lead to significant performance
 improvements, but it comes at the cost of learning a new syntax.
 
 As with `dplyr` and `data.table`, the choice between Armadillo and Eigen
-As an example, the `economiccomplexity` package [@vargassepulveda2020] uses base
-R depends on the user's needs and preferences. For instance, Armadillo or Eigen
+depends on the user's needs and preferences. For instance, Armadillo or Eigen
 can be ideal to work with a $1,000,000 \times 1,000,000$ matrix but R can be
 more suitable for a $1,000 \times 1,000$ matrix, and something similar applies
 to `dplyr` that is suitable for a 2-4 GB CSV files or SQL data but `data.table`
@@ -272,9 +466,18 @@ is more suitable for 100 GB CSV datasets.
 
 # Cases where Armadillo and Eigen stand out
 
-@vargassepulveda2020 uses base R and the Matrix package to calculate the Balassa
-index and provides international trade data for 226 countries and 785 exported
-commodities.
+Using Armadillo or Eigen can be particularly useful for functions that involve
+nested loops and recursion. If we are going to repeatedly use a function that
+requires nested loops, it may be worth rewriting it in C++ using Armadillo or
+Eigen instead of using base R. In such cases, the time incurred in learning the
+syntax and obtaining the correct function is an investment that pays off in
+long run time savings.
+
+For instance, @vargassepulveda2020 uses base R and the Matrix package to
+calculate the Balassa index and provides international trade data for 226
+countries and 785 exported commodities. A matrix of $226\times 785$ does not
+pose a problem for base R, nor it counts as big data, but it shows large speed
+gains when using Armadillo or Eigen.
 
 Let $X \in \mathbb{R}^{C\times P}$ be a matrix with entries $x_{c,p}$ that
 represents the exports of country $c$ in product $p$, from this matrix the
@@ -290,15 +493,18 @@ where $\oslash$ denotes element-wise division and $t$ denotes transposition.
 This is the same as the Balassa index for country $c$ and product $p$:
 \begin{equation}
 \label{eq:balassa2}
-B_{cp} = \frac{x_{cp}}{\sum_c x_{cp}} / \frac{\sum_p x_{cp}}{\sum_{c}\sum_{p} x_{cp}}
+B_{cp} = \frac{x_{cp}}{\sum_c x_{cp}} / \frac{\sum_p x_{cp}}{\sum_{c}\sum_{p} x_{cp}}.
 \end{equation}
 
-What is often used is to produce a zeroes and ones matrix $S$ defined as:
+$B$ is often used to produce a zeroes and ones matrix $S$ defined as:
 
 \begin{equation}
 \label{eq:balassa3}
-s_{c,p} = \begin{cases}1 & \text{ if } b_{cp} > 1\cr 0 & \text{ otherwise} \end{cases}
+s_{c,p} = \begin{cases}1 & \text{ if } b_{cp} > 1\cr 0 & \text{ otherwise} \end{cases},
 \end{equation}
+
+where a value of one indicates that country $c$ has a revealed comparative
+advantage in product $p$ and zero otherwise.
 
 \eqref{eq:balassa3} can be implemented in base R as:
 

@@ -15,5 +15,6 @@ inst/arxiv_preprint/paper.out
 inst/arxiv_preprint/paper.pdf
 inst/arxiv_preprint/paper.toc
 inst/arxiv_preprint/paper.tex
-dev/armadillobenchmarks/inst
-dev/eigenbenchmarks/inst
+dev/armadillobenchmark/inst
+dev/eigenbenchmark/inst
+dev/psarrasadaptation/inst

@@ -44,4 +44,7 @@ bench <- mark(
 
 as.numeric(bench::as_bench_time(bench$median))
 
-saveRDS(bench, "dev/benchmarks-balassa-index.rds")
+dir <- dirname(fout)
+try(dir.create(dir, recursive = TRUE))
+
+saveRDS(bench, "dev/own-balassa/benchmarks-balassa-index.rds")

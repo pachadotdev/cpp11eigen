@@ -5,7 +5,7 @@ library(purrr)
 
 # tidy ----
 
-finp <- list.files("benchmarks/niagara/small", pattern = "benchmarks-matrix-calculation", full.names = TRUE)
+finp <- list.files("benchmarks/niagara/att-small", pattern = "benchmarks-matrix-calculation", full.names = TRUE)
 
 d <- map_df(
   finp,
@@ -57,7 +57,7 @@ d1 <- d %>%
 d1 <- d1 %>%
   separate(expression, into = c("operation", "software"), sep = " - ")
 
-finp <- list.files("benchmarks/niagara/small", pattern = "benchmarks-matrix-functions", full.names = TRUE)
+finp <- list.files("benchmarks/niagara/att-small", pattern = "benchmarks-matrix-functions", full.names = TRUE)
 
 d <- map_df(
   finp,
@@ -104,7 +104,7 @@ d2 <- d %>%
 d2 <- d2 %>%
   separate(expression, into = c("operation", "software"), sep = " - ")
 
-finp <- list.files("benchmarks/niagara/small", pattern = "benchmarks-programmation", full.names = TRUE)
+finp <- list.files("benchmarks/niagara/att-small", pattern = "benchmarks-programmation", full.names = TRUE)
 
 d <- map_df(
   finp,
@@ -239,4 +239,4 @@ d3$operation <- gsub("(\\d)(\\d)(\\d)(\\d)", "\\1,\\2\\3\\4", d3$operation)
 
 out <- list(d1 = d1, d2 = d2, d3 = d3)
 
-saveRDS(out, "inst/arxiv_preprint/tables-niagara-small.rds")
+saveRDS(out, "inst/arxiv_preprint/tables-niagara-att-small.rds")

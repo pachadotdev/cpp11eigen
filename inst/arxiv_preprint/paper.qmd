@@ -25,7 +25,7 @@ outline: true
 
 # Abstract
 
-This article introduces `cpp11armadillo` and `cpp11eigen`, new R package that
+This article compares `cpp11armadillo` and `cpp11eigen`, new R packages that
 integrate the powerful Armadillo and Eigen C++ libraries for linear algebra into
 the R programming environment. This article provides a detailed comparison
 between Armadillo and Eigen speed and syntax. The goal of these packages is to
@@ -54,76 +54,21 @@ flexibility and speed, while [Armadillo](http://arma.sourceforge.net/) focuses
 on a balance between speed and easy of use.
 
 [`RcppArmadillo`](https://cran.r-project.org/package=RcppArmadillo), introduced
-in 2010, integrates R and Armadillo [@sanderson2016; @eddelbuettel2014]. [`RcppEigen`](https://cran.r-project.org/package=RcppEigen), introduced in 2011, integrates Eigen with R through the Rcpp
-package, enabling the use of C++ for performance-critical parts of R code. At
-the time of writing this document, 732 CRAN packages depend on 'RcppArmadillo' and
-238 on 'RcppEigen' [@lee2024], and therefore these are highly successful
-packages considering that the median number of reverse dependencies for CRAN packages is five and the distribution of dependencies situates these packages as top one percent.
-
-The following plot situates RcppArmadillo and RcppEigen in the R ecosystem [@lee2024, @ggplot2, @tintin]:
-
-```{r quantiles, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=4}
-library(ggplot2)
-library(dplyr)
-library(tintin)
-library(forcats)
-
-d <- cran_dependencies %>%
-  filter(type != "suggests") %>%
-  group_by(to) %>%
-  count()
-
-d %>%
-  filter(to %in% c("RcppArmadillo", "RcppEigen"))
-  
-quantile(d$n, probs = c(0.95, 0.98, 0.99))
-
-d <- d %>%
-  filter(n >= 100)
-
-# create histogram
-
-clr <- tintin_clrs(1, option = "tintin in the land of the soviets")
-
-ggplot(d) +
-  geom_density(aes(n), fill = clr) +
-  labs(
-    title = "Number of dependencies for CRAN packages",
-    subtitles = "Excluding packages with less than 100 dependencies",
-    x = "Number of reverse dependencies",
-    y = "Density"
-  ) +
-  # add vertical lines at 259 and 790
-  geom_vline(xintercept = c(259, 790), linetype = "dashed") +
-  annotate(
-    geom = "text",
-    x = 259, y = 0.003, label = "RcppEigen",
-    hjust = -0.1, vjust = 0, size = 5
-  ) +
-  annotate(
-    geom = "text",
-    x = 790, y = 0.003, label = "RcppArmadillo",
-    hjust = -0.1, vjust = 0, size = 5
-  ) +
-  theme_minimal(base_size = 13)
-```
-
-```{r quantiles2, echo=FALSE, warning=FALSE, message=FALSE}
-# copy and paste reverse linking
-# https://cran.r-project.org/web/packages/cpp11/index.html
-
-# cpp11 goes to LinkingTo and not Depends, so lee2024 does not count it
-text <- "ambient, area, arrow, bignum, bigrquery, binpackr, BiocParallel, carbondate, cheapr, clock, CMF, cppdoubles, CytoML, deformula, densityClust, epiworldR, flowCore, flowWorkspace, ggraph, haven, heumilkr, hilbert, httpgd, igraph, jinjar, literanger, lobstr, lzstring, marquee, meltr, mice, minty, MOSim, myTAI, ncdfFlow, openCyto, particles, poputils, rar, RcppAlgos, RcppBigIntAlgos, readNSx, readr, readxl, rjsoncons, RMariaDB, roxygen2, RPostgres, RSQLite, shide, shinytest2, sift, SpatialKDE, spatialsample, supercells, svglite, systemfonts, tardis, textrecipes, textshaping, tidyfast, tidygraph, tidyr, timechange, timeplyr, tipitaka, transformr, triangulr, triptych, tweenr, twosamples, tzdb, unigd, vdiffr, vroom, websocket"
-
-# Count the number of commas
-num_commas <- stringr::str_count(text, ",")
-num_commas
-```
+in 2010, integrates R and Armadillo [@sanderson2016; @eddelbuettel2014].
+[`RcppEigen`](https://cran.r-project.org/package=RcppEigen), introduced in 2011,
+integrates Eigen with R through the `Rcpp` package introduced in 2008, enabling
+the use of C++ for performance-critical parts of R code. At the time of writing
+this document, 732 CRAN packages depend on `RcppArmadillo` and 238 on
+`RcppEigen` [@lee2024], and therefore these are highly successful packages
+considering that the median number of reverse dependencies for CRAN packages is
+five and the distribution of dependencies situates these packages as top one
+percent.
 
 `cpp11armadillo` and `cpp11eigen` are independent project that aim to simplify
 the integration of R and C++ by using `cpp11`, an R package introduced in 2020
 that eases calling C++ functions from R, it is currently used as a dependency
-by 75 CRAN packages, and it is in the top one percent of CRAN packages.
+by 75 CRAN packages, and it is in the top one percent of CRAN packages
+[@cran2024].
 
 A distinctive characteristic of `cpp11armadillo` and `cpp11eigen` is the
 vendoring capability, meaning that it allows to copy its code into a project,
@@ -209,8 +154,6 @@ normal distribution because it only provides a built-in function for the uniform
 distribution:
 
 ```cpp
-// C++
-
 #include <cpp11.hpp>
 #include <cpp11eigen.hpp>
 #include <random>
@@ -269,7 +212,7 @@ benchmarks are as follows:
 ```{r results, echo=FALSE, warning=FALSE, message=FALSE}
 library(knitr)
 
-d <- readRDS("tables-laptop-small.rds")
+d <- readRDS("tables-laptop-att-small.rds")
 
 d1 <- d$d1
 d2 <- d$d2
@@ -282,8 +225,8 @@ d3 <- d3[, c(1, 2, 4)]
 kable(
   d1,
   caption = "Matrix calculation",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -291,8 +234,8 @@ kable(
 kable(
   d2,
   caption = "Matrix functions",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -300,8 +243,8 @@ kable(
 kable(
   d3,
   caption = "Programmation",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -335,7 +278,7 @@ The median times for the adapted and comparable implementations of the ATT
 benchmarks are as follows:
 
 ```{r results2, echo=FALSE, warning=FALSE, message=FALSE}
-d <- readRDS("tables-niagara-small.rds")
+d <- readRDS("tables-niagara-att-small.rds")
 
 d1 <- d$d1
 d2 <- d$d2
@@ -352,8 +295,8 @@ d3 <- d3[, c(1, 3, 5)]
 kable(
   d1,
   caption = "Matrix calculation",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -361,8 +304,8 @@ kable(
 kable(
   d2,
   caption = "Matrix functions",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -370,8 +313,8 @@ kable(
 kable(
   d3,
   caption = "Programmation",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -381,7 +324,7 @@ Repeating the same after multiplicating the number of rows and columns by five
 leads to the following results:
 
 ```{r results3, echo=FALSE, warning=FALSE, message=FALSE}
-d <- readRDS("tables-niagara-large.rds")
+d <- readRDS("tables-niagara-att-large.rds")
 
 d1 <- d$d1
 d2 <- d$d2
@@ -398,8 +341,8 @@ d3 <- d3[, c(1, 3, 5)]
 kable(
   d1,
   caption = "Matrix calculation",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -407,8 +350,8 @@ kable(
 kable(
   d2,
   caption = "Matrix functions",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -416,8 +359,8 @@ kable(
 kable(
   d3,
   caption = "Programmation",
-  # col.names = c("Operation", "Time (s)", "Time (% to best time)", "Rank"),
-  col.names = c("Operation", "Time (s)", "Rank"),
+  # col.names = c("Operation", "Median time (s)", "Time (% to best time)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   # align = c("l", "r", "r", "r")
   align = c("l", "r", "r")
 )
@@ -429,13 +372,14 @@ of the algorithms, meaning that doubling the size of the matrix does not double
 the time to run the function unless the function has a time complexity of
 $O(n)$.
 
-# Comparison with R packages
+# Similarities between C++ libraries and R packages
 
-The syntax and speed differences posit a similar case to the tradeoff between
-using `dplyr` and `data.table` [@wickham2019;@barrett2024], where `dplyr` is
-easier to use but `data.table` is faster. `dplyr` was not designed to be fast
-but `data.table` was not designed to be easy to use. For instance, the code to
-obtain the grouped means by number of cylinders in the `mtcars` dataset is:
+The syntax and speed differences when using Armadillo or Eigen in C++ posit a
+similar case to the tradeoff between using `dplyr` and `data.table`
+[@wickham2019;@barrett2024], where `dplyr` is easier to use but `data.table` is
+faster. `dplyr` was not designed to be fast but `data.table` was not designed to
+be easy to use. For instance, the code to obtain the grouped means by number of
+cylinders in the `mtcars` dataset is:
 
 ```r
 # dplyr
@@ -569,14 +513,14 @@ includes the time to move the data between R and C++:
 ```{r balassa, echo=FALSE, warning=FALSE, message=FALSE}
 d <- data.frame(
   `Operation` = paste("Balassa indices", c("Eigen", "Armadillo", "R")),
-  `Time (s)` = c(0.013, 0.014, 0.026),
+  `Median time (s)` = c(0.013, 0.014, 0.026),
   `Rank` = c(1, 2, 3)
 )
 
 kable(
   d,
   caption = "Balassa indices",
-  col.names = c("Operation", "Time (s)", "Rank"),
+  col.names = c("Operation", "Median time (s)", "Rank"),
   align = c("l", "r", "r")
 )
 ```
@@ -585,6 +529,150 @@ The rest of the methods in @vargassepulveda2020 involve recursion and
 eigenvalues computation, and these tasks were already covered in the ATT
 benchmark, meaning that the same speed gains can be expected as in the Balassa
 matrix.
+
+# Benchmarks with data transfer
+
+@psarras2022 provides different benchmarks for the Linear Algebra Mapping
+Problem. We have adapted their benchmarks to solve linear systems in order to
+extrapolate their findings to a larger input data.
+
+We repeated the experiment consisting in solving a linear system of equations
+$AX = B$ with $A \in \mathbb{R}^{n \times n}$ and
+$B \in \mathbb{R}^{n \times m}$ for $n = 30,000$ and $m = 1,000$. Because
+only `cpp11armadillo` has available methods to pass sparse matrices between
+R and C++, we created dense matrices to also include `cpp11eigen` in the
+comparison, and this also adds additional stress to the tests.
+
+A dense matrix with double precision entries
+$A \in \mathbb{R}^{30,000 \times 30,000}$ uses 6.7 GB of RAM and can be
+created and operated in the Niagara cluster without problems. The benchmark
+repeats the same task in two different ways, in a naive way by directly
+computing $A^{-1}B$ and in a smart way by using `solve(A,B)`. The solution
+always exists because the data is created by first defining random matrices $A$
+and $X$ and then computing $B = AX$, the benchmarks use $A$ and $B$ as inputs to
+solve for $X$. For the cases where $A^{-1}$ is not directly obtained, R and
+Armadillo use the LU decomposition by inspecting the matrix structure while in
+Eigen this has to be specified, and this is the correct approach provided that
+$A$ was created with the `rnorm()` function in R without guarantee of symmetry
+nor it results in an overdetermined system.
+
+The benchmark results are as follows:
+
+```{r results4, echo=FALSE, warning=FALSE, message=FALSE}
+d <- readRDS("tables-niagara-psarras.rds")
+d <- d[, c(1, 4, 5)]
+d[, 2] <- round(d[, 2], 3)
+
+kable(
+  d,
+  caption = "Solving linear systems",
+  col.names = c("Operation", "Median time (s)", "Rank"),
+  align = c("l", "r", "r")
+)
+```
+
+Armadillo leads in performance for the naive solution. This means that, even
+after considering the overhead of data transfer, Armadillo excels at
+computationally intensive tasks that involve repeated operations as it is the
+case of repeating row and column multiplication to obtain $X$, and this
+benchmark does not cover additional data structures in C++ that do not exist in
+R and that provide additional flexibility.
+
+R leads in performance for the smart solution not because of the data transfer
+overhead, but because R internally uses LAPACK and BLAS libraries that are
+highly optimized for linear algebra operations. In the particular case of the
+Niagara cluster, R was compiled against the Intel MKL library, which is highly
+optimized for Intel processors and benefits from the specific processor
+instructions set. Armadillo and Eigen in this case also use the Intel MKL
+library, and for a benchmark with a smaller size input data (e.g.
+$100\times 100$)the overhead of data transfer and using 40 cores would be higher
+than the speed gains.
+
+# Considerations
+
+Being fair, R was not designed to be fast, and it is not a low-level language
+like C++. R is a high-level language that some users consider easy to learn and
+use, and it is particularly useful for data manipulation and visualization. R
+has a large number of packages that can be used to conduct a wide range of
+statistical analyses, and it is particularly useful for non-programmers.
+
+Armadillo and Eigen are not designed to be easy to use, and they involve a
+learning curve to use them effectively. These libraries are particularly useful
+for computationally intensive tasks that involve nested loops and recursion.
+These languages have speed advantages over R for two main reasons, that the
+time it takes for each step in a loop is shorter in C++ than in R, and that
+these libraries provide efficient data structures for vectors and matrices
+besides providing internal methods that combine operations to increase speed
+and reduce memory usage.
+
+The choice between R and C++ depends on the user's needs and preferences. In a
+way, comparing R and C++ is like comparing a Vespa and a Ducati motorcycle, both
+are motorcycles but they are designed for different purposes and excel in
+different areas. For instance, a Vespa is ideal for city commuting and a Ducati
+is ideal for racing, and the same applies to R and C++.
+
+Using C++ for tasks such as data manipulation and visualization is like using a
+Ford F-150 to go to the convenience store, it is feasible but it is not the most
+efficient way to do it and the additional fuel consumption compared to a lighter
+vehicle ressembles the extra time required to compile and corrrect the code. In
+the same way, using R for computationally intensive tasks is like using a Mini
+Cooper to load bricks and construction materials, it is feasible but you cannot
+expect the same experience (e.g., speed and comfort) as using a Ford F-150 for
+the same task.
+
+Writing proper C++ code requires a good understanding of the syntax and reading
+the respective documentation that each library provides. For instance, without
+reading the Armadillo documentation, it is very tempting to transpose a matrix
+in the following way:
+
+```cpp
+mat bad_transposition_(const int& n) {
+  mat a = randn<mat>(n, n) / 10;
+  
+  mat b(a.n_cols, a.n_rows);
+
+  for (int i = 0; i < a.n_rows; i++) {
+    for (int j = 0; j < a.n_cols; j++) {
+      b(i, j) = a(j, i);
+    }
+  }
+
+  return b;
+}
+```
+
+Or, even worse, trying to make it faster by using OMP, which would be faster
+but not efficient in terms of syntax and available alternatives:
+
+```cpp
+mat less_bad_transposition_(const int& n) {
+  mat a = randn<mat>(n, n) / 10;
+  
+  mat b(a.n_cols, a.n_rows);
+
+  #ifdef _OPENMP
+  #pragma omp parallel for collapse(2) schedule(static)
+  #endif
+  for (int i = 0; i < a.n_rows; i++) {
+    for (int j = 0; j < a.n_cols; j++) {
+      b(i, j) = a(j, i);
+    }
+  }
+
+  return b;
+}
+```
+
+The correct way to transpose a matrix in Armadillo, such that its internals
+apply low-level optimizations, is to use the `t()` function, and it also saves
+time and typing:
+
+```cpp
+mat good_transposition_(const int& n) {
+  mat a = randn<mat>(n, n) / 10;
+  return a.t();
+}
+```
 
 # Conclusion
 
@@ -596,5 +684,10 @@ computationally demanding applications. Armadillo and `cpp11armadillo`, on the
 other hand, provides a balance between speed and ease of use, and it is a good
 choice for users who need to write C++ code that is easier to modify and
 maintain.
+
+# Acknowledgements
+
+I appreciate that Paolo Bientinesi from Umea University read a previous version
+of this document on arXiv and referred me to @psarras2022.
 
 # References

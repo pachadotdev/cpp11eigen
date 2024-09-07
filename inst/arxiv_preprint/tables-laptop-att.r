@@ -2,7 +2,7 @@ library(dplyr)
 library(bench)
 library(purrr)
 
-finp <- list.files("benchmarks/laptop", pattern = "benchmarks-matrix-calculation", full.names = TRUE)
+finp <- list.files("benchmarks/laptop/att-small", pattern = "benchmarks-matrix-calculation", full.names = TRUE)
 
 d <- map_df(
   finp,
@@ -46,7 +46,7 @@ d1 <- d %>%
   ) %>%
   select(expression, median, relative, rank)
 
-finp <- list.files("benchmarks/laptop", pattern = "benchmarks-matrix-functions", full.names = TRUE)
+finp <- list.files("benchmarks/laptop/att-small", pattern = "benchmarks-matrix-functions", full.names = TRUE)
 
 d <- map_df(
   finp,
@@ -91,7 +91,7 @@ d2 <- d %>%
   select(expression, median, relative, rank)
 
 
-finp <- list.files("benchmarks/laptop", pattern = "benchmarks-programmation", full.names = TRUE)
+finp <- list.files("benchmarks/laptop/att-small", pattern = "benchmarks-programmation", full.names = TRUE)
 
 d <- map_df(
   finp,
@@ -215,4 +215,4 @@ d3$expression <- gsub("(\\d)(\\d)(\\d)(\\d)", "\\1,\\2\\3\\4", d3$expression)
 
 out <- list(d1 = d1, d2 = d2, d3 = d3)
 
-saveRDS(out, "inst/arxiv_preprint/tables-laptop-small.rds")
+saveRDS(out, "inst/arxiv_preprint/tables-laptop-att-small.rds")

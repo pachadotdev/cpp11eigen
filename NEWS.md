@@ -1,3 +1,7 @@
+# cpp11eigen 0.2.5
+
+* Uses `reinterpret_cast` instead of loops to copy from R to C++ and vice versa.
+
 # cpp11eigen 0.2
 
 * Wrappers for complex numbers.

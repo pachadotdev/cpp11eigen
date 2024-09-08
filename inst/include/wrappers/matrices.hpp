@@ -82,16 +82,14 @@ inline U Matrix_to_dblint_matrix_(
                                 writable::doubles_matrix<>,
                                 writable::integers_matrix<>>::type;
 
+  using dblint =
+      typename std::conditional<std::is_same<U, doubles>::value, double, int>::type;
+
   dblint_matrix B(n, m);
 
-#ifdef _OPENMP
-#pragma omp parallel for collapse(2) schedule(static)
-#endif
-  for (int i = 0; i < n; ++i) {
-    for (int j = 0; j < m; ++j) {
-      B(i, j) = A(i, j);
-    }
-  }
+  dblint* data = reinterpret_cast<dblint*>(B.data());
+
+  std::copy(data, data + n * m, B.data());
 
   return B;
 }

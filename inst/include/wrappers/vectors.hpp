@@ -25,14 +25,14 @@ inline U Matrix_to_dblint_(const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic
   using dblint = typename std::conditional<std::is_same<U, doubles>::value,
                                            writable::doubles, writable::integers>::type;
 
+  using dblint2 =
+      typename std::conditional<std::is_same<U, doubles>::value, double, int>::type;
+
   dblint y(n);
 
-#ifdef _OPENMP
-#pragma omp parallel for schedule(static)
-#endif
-  for (int i = 0; i < n; ++i) {
-    y[i] = x(i, 0);
-  }
+  dblint2* data = reinterpret_cast<dblint2*>(y.data());
+
+  std::copy(data, data + n, y.data());
 
   return y;
 }

@@ -30,7 +30,7 @@ inline U Matrix_to_dblint_(const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic
 
   dblint y(n);
 
-  dblint2* data = reinterpret_cast<dblint2*>(y.data());
+  const dblint2* data = reinterpret_cast<const dblint2*>(y.data());
 
   std::copy(data, data + n, y.data());
 

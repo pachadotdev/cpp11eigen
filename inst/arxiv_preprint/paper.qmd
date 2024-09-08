@@ -372,11 +372,69 @@ of the algorithms, meaning that doubling the size of the matrix does not double
 the time to run the function unless the function has a time complexity of
 $O(n)$.
 
+# Benchmarks with data transfer
+
+@psarras2022 provides different benchmarks for the Linear Algebra Mapping
+Problem. We have adapted their benchmarks to solve linear systems in order to
+extrapolate their findings to a larger input data.
+
+We repeated the experiment consisting in solving a linear system of equations
+$AX = B$ with $A \in \mathbb{R}^{n \times n}$ and
+$B \in \mathbb{R}^{n \times m}$ for $n = 30,000$ and $m = 1,000$. Because
+only `cpp11armadillo` has available methods to pass sparse matrices between
+R and C++, we created dense matrices to also include `cpp11eigen` in the
+comparison, and this also adds additional stress to the tests.
+
+A dense matrix with double precision entries
+$A \in \mathbb{R}^{30,000 \times 30,000}$ uses 6.7 GB of RAM and can be
+created and operated in the Niagara cluster without problems. The benchmark
+repeats the same task in two different ways, in a naive way by directly
+computing $A^{-1}B$ and in a smart way by using `solve(A,B)`. The solution
+always exists because the data is created by first defining random matrices $A$
+and $X$ and then computing $B = AX$, the benchmarks use $A$ and $B$ as inputs to
+solve for $X$. For the cases where $A^{-1}$ is not directly obtained, R and
+Armadillo use the LU decomposition by inspecting the matrix structure while in
+Eigen this has to be specified, and this is the correct approach provided that
+$A$ was created with the `rnorm()` function in R without guarantee of symmetry
+nor it results in an overdetermined system.
+
+The benchmark results are as follows:
+
+```{r results4, echo=FALSE, warning=FALSE, message=FALSE}
+d <- readRDS("tables-niagara-psarras.rds")
+d <- d[, c(1, 4, 5)]
+d[, 2] <- round(d[, 2], 3)
+
+kable(
+  d,
+  caption = "Solving linear systems",
+  col.names = c("Operation", "Median time (s)", "Rank"),
+  align = c("l", "r", "r")
+)
+```
+
+Armadillo leads in performance for the naive solution. This means that, even
+after considering the overhead of data transfer, Armadillo excels at
+computationally intensive tasks that involve repeated operations as it is the
+case of repeating row and column multiplication to obtain $X$, and this
+benchmark does not cover additional data structures in C++ that do not exist in
+R and that provide additional flexibility.
+
+R leads in performance for the smart solution not because of the data transfer
+overhead, but because R internally uses LAPACK and BLAS libraries that are
+highly optimized for linear algebra operations. In the particular case of the
+Niagara cluster, R was compiled against the Intel MKL library, which is highly
+optimized for Intel processors and benefits from the specific processor
+instructions set. Armadillo and Eigen in this case also use the Intel MKL
+library, and for a benchmark with a smaller size input data (e.g.
+$100\times 100$)the overhead of data transfer and using 40 cores would be higher
+than the speed gains.
+
 # Similarities between C++ libraries and R packages
 
 The syntax and speed differences when using Armadillo or Eigen in C++ posit a
 similar case to the tradeoff between using `dplyr` and `data.table`
-[@wickham2019;@barrett2024], where `dplyr` is easier to use but `data.table` is
+[@wickham2019;@barrett2024]. `dplyr` is easier to use but `data.table` is
 faster. `dplyr` was not designed to be fast but `data.table` was not designed to
 be easy to use. For instance, the code to obtain the grouped means by number of
 cylinders in the `mtcars` dataset is:
@@ -406,16 +464,16 @@ depends on the user's needs and preferences. For instance, Armadillo or Eigen
 can be ideal to work with a $1,000,000 \times 1,000,000$ matrix but R can be
 more suitable for a $1,000 \times 1,000$ matrix, and something similar applies
 to `dplyr` that is suitable for a 2-4 GB CSV files or SQL data but `data.table`
-is more suitable for 100 GB CSV datasets.
+is more suitable for large datasets (e.g., 100 GB CSV files).
 
 # Cases where Armadillo and Eigen stand out
 
 Using Armadillo or Eigen can be particularly useful for functions that involve
 nested loops and recursion. If we are going to repeatedly use a function that
-requires nested loops, it may be worth rewriting it in C++ using Armadillo or
-Eigen instead of using base R. In such cases, the time incurred in learning the
-syntax and obtaining the correct function is an investment that pays off in
-long run time savings.
+requires nested loops or multiple linear algebra operations, it may be worth
+rewriting it in C++ using Armadillo or Eigen instead of using base R. In such
+cases, the time incurred in learning the syntax and obtaining the correct
+function is an investment that pays off in long run time savings.
 
 For instance, @vargassepulveda2020 uses base R and the Matrix package to
 calculate the Balassa index and provides international trade data for 226
@@ -506,9 +564,10 @@ using namespace Eigen;
 ```
 
 If we use UN COMTRADE data for the year 2020 for 234 countries and 5,386
-countries [@unitednations2023], we can observe that Armadillo and Eigen are
-around two times faster than base R at obtaining the Balassa matrix, and this
-includes the time to move the data between R and C++:
+countries in the finest granularity level data from @unitednations2023, we can
+observe that Armadillo and Eigen are around two times faster than base R at
+obtaining the Balassa matrix, and this includes the time to move the data
+between R and C++:
 
 ```{r balassa, echo=FALSE, warning=FALSE, message=FALSE}
 d <- data.frame(
@@ -529,64 +588,6 @@ The rest of the methods in @vargassepulveda2020 involve recursion and
 eigenvalues computation, and these tasks were already covered in the ATT
 benchmark, meaning that the same speed gains can be expected as in the Balassa
 matrix.
-
-# Benchmarks with data transfer
-
-@psarras2022 provides different benchmarks for the Linear Algebra Mapping
-Problem. We have adapted their benchmarks to solve linear systems in order to
-extrapolate their findings to a larger input data.
-
-We repeated the experiment consisting in solving a linear system of equations
-$AX = B$ with $A \in \mathbb{R}^{n \times n}$ and
-$B \in \mathbb{R}^{n \times m}$ for $n = 30,000$ and $m = 1,000$. Because
-only `cpp11armadillo` has available methods to pass sparse matrices between
-R and C++, we created dense matrices to also include `cpp11eigen` in the
-comparison, and this also adds additional stress to the tests.
-
-A dense matrix with double precision entries
-$A \in \mathbb{R}^{30,000 \times 30,000}$ uses 6.7 GB of RAM and can be
-created and operated in the Niagara cluster without problems. The benchmark
-repeats the same task in two different ways, in a naive way by directly
-computing $A^{-1}B$ and in a smart way by using `solve(A,B)`. The solution
-always exists because the data is created by first defining random matrices $A$
-and $X$ and then computing $B = AX$, the benchmarks use $A$ and $B$ as inputs to
-solve for $X$. For the cases where $A^{-1}$ is not directly obtained, R and
-Armadillo use the LU decomposition by inspecting the matrix structure while in
-Eigen this has to be specified, and this is the correct approach provided that
-$A$ was created with the `rnorm()` function in R without guarantee of symmetry
-nor it results in an overdetermined system.
-
-The benchmark results are as follows:
-
-```{r results4, echo=FALSE, warning=FALSE, message=FALSE}
-d <- readRDS("tables-niagara-psarras.rds")
-d <- d[, c(1, 4, 5)]
-d[, 2] <- round(d[, 2], 3)
-
-kable(
-  d,
-  caption = "Solving linear systems",
-  col.names = c("Operation", "Median time (s)", "Rank"),
-  align = c("l", "r", "r")
-)
-```
-
-Armadillo leads in performance for the naive solution. This means that, even
-after considering the overhead of data transfer, Armadillo excels at
-computationally intensive tasks that involve repeated operations as it is the
-case of repeating row and column multiplication to obtain $X$, and this
-benchmark does not cover additional data structures in C++ that do not exist in
-R and that provide additional flexibility.
-
-R leads in performance for the smart solution not because of the data transfer
-overhead, but because R internally uses LAPACK and BLAS libraries that are
-highly optimized for linear algebra operations. In the particular case of the
-Niagara cluster, R was compiled against the Intel MKL library, which is highly
-optimized for Intel processors and benefits from the specific processor
-instructions set. Armadillo and Eigen in this case also use the Intel MKL
-library, and for a benchmark with a smaller size input data (e.g.
-$100\times 100$)the overhead of data transfer and using 40 cores would be higher
-than the speed gains.
 
 # Considerations
 

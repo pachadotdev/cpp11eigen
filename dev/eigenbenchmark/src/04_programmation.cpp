@@ -39,7 +39,7 @@
       a(i, j) = 1.0 / (i + j + 1);
     }
   }
-  
+
   return 0;
 }
 
@@ -59,9 +59,9 @@ int gcd(int a, int b) {
 
   VectorXd b =
       (VectorXd::Random(n) * 1000).unaryExpr([](double x) { return std::ceil(x); });
-  
+
   VectorXd c(n);
-  
+
 #ifdef _OPENMP
 #pragma omp parallel for schedule(static)
 #endif
@@ -85,7 +85,7 @@ int gcd(int a, int b) {
       a(i, j) = abs(i - j) + 1;
     }
   }
-  
+
   return 0;
 }
 

@@ -78,7 +78,7 @@ int gcd(int a, int b) {
       a(i, j) = abs(i - j) + 1;
     }
   }
-  
+
   return 0;
 }
 

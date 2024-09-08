@@ -23,11 +23,11 @@ inline Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> dblint_matrix_to_Matrix_
 
   if (std::is_same<U, doubles_matrix<>>::value) {
     Eigen::Map<Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>> y(
-        reinterpret_cast<const T*>(REAL(x.data())), n, m);
+        reinterpret_cast<T*>(REAL(x.data())), n, m);
     return y;
   } else {
     Eigen::Map<Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>> y(
-        reinterpret_cast<const T*>(INTEGER(x.data())), n, m);
+        reinterpret_cast<T*>(INTEGER(x.data())), n, m);
     return y;
   }
 }
@@ -38,11 +38,11 @@ inline Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> dblint_to_Matrix_(const 
 
   if (std::is_same<U, doubles>::value) {
     Eigen::Map<Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>> y(
-        reinterpret_cast<const T*>(REAL(x.data())), n, 1);
+        reinterpret_cast<T*>(REAL(x.data())), n, 1);
     return y;
   } else {
     Eigen::Map<Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>> y(
-        reinterpret_cast<const T*>(INTEGER(x.data())), n, 1);
+        reinterpret_cast<T*>(INTEGER(x.data())), n, 1);
     return y;
   }
 }
@@ -82,14 +82,16 @@ inline U Matrix_to_dblint_matrix_(
                                 writable::doubles_matrix<>,
                                 writable::integers_matrix<>>::type;
 
-  using dblint = typename std::conditional<std::is_same<U, doubles_matrix<>>::value,
-                                           double, int>::type;
-
   dblint_matrix B(n, m);
 
-  const dblint* data = reinterpret_cast<const dblint*>(B.data());
-
-  std::copy(data, data + n * m, B.data());
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2) schedule(static)
+#endif
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      B(i, j) = A(i, j);
+    }
+  }
 
   return B;
 }

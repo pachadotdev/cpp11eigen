@@ -1,9 +1,9 @@
 ---
-title: "Introduction to 'cpp11eigen'"
+title: "Basic 'cpp11eigen' usage"
 output: rmarkdown::html_vignette
 bibliography: "references.bib"
 vignette: >
-  %\VignetteIndexEntry{Introduction to 'cpp11eigen'}
+  %\VignetteIndexEntry{Basic 'cpp11eigen' usage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -27,11 +27,12 @@ inline U Matrix_to_dblint_(const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic
 
   dblint y(n);
 
-#ifdef _OPENMP
-#pragma omp parallel for schedule(static)
-#endif
-  for (int i = 0; i < n; i++) {
-    y[i] = x(i, 0);
+  if (std::is_same<U, doubles>::value) {
+    double* y_data = REAL(y);
+    std::memcpy(y_data, x.data(), n * sizeof(double));
+  } else {
+    int* y_data = INTEGER(y);
+    std::memcpy(y_data, x.data(), n * sizeof(int));
   }
 
   return y;
